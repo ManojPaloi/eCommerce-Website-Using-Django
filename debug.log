@@ -4,3 +4,81 @@ Watching for file changes with StatReloader
 Watching for file changes with StatReloader
 E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\mystore\settings.py changed, reloading.
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\mystore\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /accounts/login/
+Traceback (most recent call last):
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\accounts\views.py", line 168, in login
+    return render(request, 'accounts/login.html', {'form': form})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\django\template\library.py", line 321, in render
+    output = self.func(*resolved_args, **resolved_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\allauth\socialaccount\templatetags\socialaccount.py", line 21, in provider_login_url
+    provider = adapter.get_provider(request, provider)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\allauth\socialaccount\adapter.py", line 212, in get_provider
+    app = self.get_app(request, provider=provider, client_id=client_id)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\venv\Lib\site-packages\allauth\socialaccount\adapter.py", line 302, in get_app
+    raise SocialApp.DoesNotExist()
+allauth.socialaccount.models.SocialApp.DoesNotExist
+Not Found: /favicon.ico
