@@ -560,3 +560,4 @@ Forbidden (CSRF token from POST incorrect.): /accounts/login/
 Forbidden (CSRF token from POST incorrect.): /accounts/login/
 E:\eCommerce Website Using Django - Copy\eCommerce-Website-Using-Django\accounts\views.py changed, reloading.
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
