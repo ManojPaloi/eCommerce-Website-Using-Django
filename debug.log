@@ -82,3 +82,4 @@ Traceback (most recent call last):
     raise SocialApp.DoesNotExist()
 allauth.socialaccount.models.SocialApp.DoesNotExist
 Not Found: /favicon.ico
+Watching for file changes with StatReloader
