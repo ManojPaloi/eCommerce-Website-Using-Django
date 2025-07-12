@@ -106,52 +106,6 @@ def product_detail(request, category_slug, product_slug):
     }
     return render(request, 'store/product_detail.html', context)
 
-# @require_POST
-# def add_to_cart(request, product_id):
-#     # Get or create cart
-#     cart = get_or_create_cart(request)
-#     product = get_object_or_404(Product, id=product_id)
-
-#     # Get quantity from POST data
-#     try:
-#         quantity = int(request.POST.get('quantity', 1))
-#         if quantity < 1:
-#             quantity = 1
-#     except (TypeError, ValueError):
-#         quantity = 1
-
-#     # Get color and size from POST data
-#     color_option = request.POST.get('color_option', '')
-#     size_option = request.POST.get('size_option', '')
-
-#     # Check stock availability
-#     if quantity > product.stock:
-#         messages.error(request, f"Sorry, only {product.stock} units of {product.product_name} are available.")
-#         return redirect(request.META.get('HTTP_REFERER', '/'))
-
-#     # Get session cart
-#     session_cart = request.session.get('cart', {})
-
-#     # Create a unique key based on product_id, color and size
-#     cart_key = f"{product_id}_{color_option}_{size_option}"
-    
-#     # Update session cart with the unique key
-#     session_cart[cart_key] = session_cart.get(cart_key, 0) + quantity
-
-#     # Save session cart
-#     request.session['cart'] = session_cart
-#     request.session.modified = True
-
-#     # Sync with Cart and CartItem models
-#     sync_session_with_cart(request, cart)
-
-#     messages.success(request, f"{product.product_name} has been added to your cart!")
-    
-#     # Check if this is a "Buy Now" action
-#     if request.POST.get('buy_now') == 'true':
-#         return redirect('place_order')
-    
-#     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def search(request):
     categories = Category.objects.all()
