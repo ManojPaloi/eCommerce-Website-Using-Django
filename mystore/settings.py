@@ -9,13 +9,17 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
+# Security
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in ("true", "1", "t")
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "ecommerce-website-using-django-wu5o.onrender.com",
+
+allowed_hosts_env = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(",") if host.strip()]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://ecommerce-website-using-django-wu5o.onrender.com",
 ]
+
 
 
 
