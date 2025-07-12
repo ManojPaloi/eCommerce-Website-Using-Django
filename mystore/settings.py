@@ -2,29 +2,27 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'
+# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: Keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("DJANGO_SECRET_KEY environment variable is not set")
-
-# SECURITY WARNING: Don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1", "t")
+# Security
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
+DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in ("true", "1", "t")
 
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    os.getenv("DJANGO_ALLOWED_HOST", "ecommerce-website-using-django-wu5o.onrender.com"),
+    "ecommerce-website-using-django-wu5o.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    f"https://{os.getenv('DJANGO_ALLOWED_HOST', 'ecommerce-website-using-django-wu5o.onrender.com')}",
+    "https://ecommerce-website-using-django-wu5o.onrender.com",
 ]
+
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -35,13 +33,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+
     # Custom apps
     "category",
     "store",
     "carts",
     "accounts",
     "orders",
-    # Third-party apps
+
+    # Third-party
     "widget_tweaks",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -67,11 +67,13 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+
 AUTHENTICATION_BACKENDS = [
-    "accounts.authentication.EmailOrUsernameBackend",
+    "accounts.authentication.EmailOrUsernameBackend",  # Your custom backend
     "allauth.account.auth_backends.AuthenticationBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
+
 
 ROOT_URLCONF = "mystore.urls"
 
@@ -100,7 +102,7 @@ WSGI_APPLICATION = "mystore.wsgi.application"
 
 AUTH_USER_MODEL = "accounts.Account"
 
-# Allauth settings
+# Allauth updated settings for Django 5.2+
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -109,6 +111,12 @@ LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 SITE_ID = 1
 SOCIALACCOUNT_ADAPTER = 'accounts.adapters.CustomSocialAccountAdapter'
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
 
 # Database
 DATABASES = {
@@ -126,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Internationalization
+# Localization
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
@@ -144,30 +152,25 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "login"
 
+
 # Email settings
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "paloimanoj@gmail.com")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "wpseoomhfebzwusn")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-if not EMAIL_HOST_USER or not EMAIL_HOST_PASSWORD:
-    raise ValueError("EMAIL_HOST_USER and EMAIL_HOST_PASSWORD environment variables must be set")
 
 # Session and CSRF settings
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "False").lower() in ("true", "1", "t")
-CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "False").lower() in ("true", "1", "t")
+SESSION_COOKIE_SECURE = False  # Set to True in production
+CSRF_COOKIE_SECURE = False  # Set to True in production
 CSRF_COOKIE_HTTPONLY = False
 
 # Razorpay credentials
-RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
-RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
-
-if not RAZORPAY_KEY_ID or not RAZORPAY_KEY_SECRET:
-    raise ValueError("RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET environment variables must be set")
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_NqgKbEIscBSeuB")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "IDKoHuiNOxIi72uukBJdlwj5")
 
 # Logging
 LOGGING = {
@@ -175,11 +178,11 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "level": "DEBUG",
+            "level": "DEBUG",  # Changed to DEBUG to capture more logs
             "class": "logging.FileHandler",
             "filename": BASE_DIR / "debug.log",
         },
-        "console": {
+        "console": {  # Added console handler for debugging
             "level": "DEBUG",
             "class": "logging.StreamHandler",
         },
