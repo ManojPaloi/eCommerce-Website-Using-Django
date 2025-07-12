@@ -141,14 +141,15 @@ def login(request):
             password = form.cleaned_data['password']
 
             user = None
-            # Try to authenticate by username directly
-            user = authenticate(request, username=username_or_email, password=password)
-            
-            # If not found, try email lookup and authenticate by username
-            if not user:
+
+            # If username_or_email looks like an email, try authenticate directly
+            if '@' in username_or_email:
+                user = authenticate(request, email=username_or_email, password=password)
+            else:
+                # Look up email by username
                 try:
-                    user_obj = User.objects.get(email=username_or_email)
-                    user = authenticate(request, username=user_obj.username, password=password)
+                    user_obj = User.objects.get(username=username_or_email)
+                    user = authenticate(request, email=user_obj.email, password=password)
                 except User.DoesNotExist:
                     user = None
 
@@ -158,14 +159,16 @@ def login(request):
                     messages.success(request, '✅ Logged in successfully!')
                     return redirect('home')
                 else:
-                    messages.warning(request, '⚠️ Account not active. Please check your email.')
+                    messages.warning(request, '⚠️ Your account is inactive.')
             else:
-                messages.error(request, '❌ Invalid credentials.')
+                messages.error(request, '❌ Invalid username/email or password.')
         else:
-            messages.error(request, '⚠️ Please fix form errors.')
+            messages.error(request, '⚠️ Please correct the form errors.')
     else:
         form = CustomLoginForm()
+
     return render(request, 'accounts/login.html', {'form': form})
+
 
 # ✅ Logout View
 @csrf_protect

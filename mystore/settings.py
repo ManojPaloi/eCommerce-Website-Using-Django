@@ -67,6 +67,14 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+
+AUTHENTICATION_BACKENDS = [
+    "accounts.authentication.EmailOrUsernameBackend",  # Your custom backend
+    "allauth.account.auth_backends.AuthenticationBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+
 ROOT_URLCONF = "mystore.urls"
 
 TEMPLATES = [

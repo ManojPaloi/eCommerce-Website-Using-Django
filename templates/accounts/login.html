@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
-{% load socialaccount %}
 
 {% block content %}
   <main class="login-page">
@@ -16,7 +15,13 @@
             {% if messages %}
               <div class="mb-3">
                 {% for message in messages %}
-                  <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}"
+                  <div class="alert {% if message.tags == 'success' %}
+                      alert-success
+                    {% elif message.tags == 'error' %}
+                      alert-danger
+                    {% else %}
+                      alert-warning
+                    {% endif %}"
                     role="alert">{{ message }}</div>
                 {% endfor %}
               </div>
@@ -56,11 +61,6 @@
                 {% endif %}
               </div>
               <button type="submit" class="btn btn-primary btn-lg w-100 mb-4" style="color: white;">Login</button>
-              <div class="d-flex justify-content-center gap-4 mb-3">
-                <a class="btn btn-social btn-icon google-btn" href="" aria-label="Sign in with Google"><i class="fab fa-google fa-lg"></i></a>
-                <a class="btn btn-social btn-icon facebook-btn" href="" aria-label="Sign in with Facebook"><i class="fab fa-facebook-f fa-lg"></i></a>
-                <a class="btn btn-social btn-icon x-btn" href="" aria-label="Sign in with X"><i class="fab fa-twitter fa-lg"></i></a>
-              </div>
               <div class="text-center mt-3">
                 <p class="mb-2">
                   <a href="{% url 'forgot_password' %}" class="login-link">Forgot Password?</a>
@@ -133,73 +133,6 @@
     .form-control[type='password'] {
       padding-right: 40px;
     }
-    .btn-social.btn-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      transition: all 0.3s ease;
-      border: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      position: relative;
-      overflow: hidden;
-      text-decoration: none;
-      margin: 0 8px;
-    }
-    .btn-social.btn-icon:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-    }
-    .google-btn {
-      background-color: #ffffff;
-      border: 1px solid #dadce0;
-      color: #3c4043;
-    }
-    .google-btn:hover {
-      background-color: #f8f9fa;
-      color: #1a73e8;
-    }
-    .facebook-btn {
-      background-color: #1877f2;
-      color: #ffffff;
-    }
-    .facebook-btn:hover {
-      background-color: #166fe5;
-    }
-    .x-btn {
-      background-color: #000000;
-      color: #ffffff;
-    }
-    .x-btn:hover {
-      background-color: #1d9bf0;
-    }
-    .btn-social.btn-icon::after {
-      content: '';
-      position: absolute;
-      background: rgba(255, 255, 255, 0.3);
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      transform: scale(0);
-      animation: ripple 0.6s linear;
-      display: none;
-    }
-    .btn-social.btn-icon:active::after {
-      display: block;
-    }
-    @keyframes ripple {
-      to {
-        transform: scale(2);
-        opacity: 0;
-      }
-    }
-    .btn-social.btn-icon:focus {
-      outline: 2px solid #ff4c4c;
-      outline-offset: 2px;
-    }
     .login-link {
       color: #ff4c4c;
       font-weight: 600;
@@ -217,13 +150,6 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
-    @media (max-width: 576px) {
-      .btn-social.btn-icon {
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
-      }
-    }
     .toggle-password-icon {
       font-size: 1.2rem;
     }
@@ -238,28 +164,32 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const toggleIcon = document.querySelector('.toggle-password-icon');
-      const passwordInput = document.querySelector('#id_password');
-
+      const toggleIcon = document.querySelector('.toggle-password-icon')
+      const passwordInput = document.querySelector('#id_password')
+    
       if (!toggleIcon) {
-        console.error('Error: Toggle icon not found.');
-        return;
+        console.error('Error: Toggle icon not found.')
+        return
       }
       if (!passwordInput) {
-        console.error('Error: Password input not found.');
-        return;
+        console.error('Error: Password input not found.')
+        return
       }
-
+    
       toggleIcon.addEventListener('click', function () {
-        const isPassword = passwordInput.type === 'password';
-        passwordInput.type = isPassword ? 'text' : 'password';
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-      });
-
-      document.querySelectorAll('.alert').forEach(alert => {
-        new bootstrap.Alert(alert);
-      });
-    });
+        const isPassword = passwordInput.type === 'password'
+        passwordInput.type = isPassword ? 'text' : 'password'
+        this.classList.toggle('fa-eye')
+        this.classList.toggle('fa-eye-slash')
+      })
+    
+      // Auto-dismiss alerts after 5 seconds
+      document.querySelectorAll('.alert').forEach((alert) => {
+        setTimeout(() => {
+          const bsAlert = new bootstrap.Alert(alert)
+          bsAlert.close()
+        }, 5000)
+      })
+    })
   </script>
 {% endblock %}
