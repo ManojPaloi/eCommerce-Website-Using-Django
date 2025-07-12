@@ -6,6 +6,7 @@ from .models import Cart, CartItem
 from orders.models import Order, OrderItem
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .utils import generate_order_qr_code
 from django.urls import reverse
@@ -119,7 +120,7 @@ def calculate_cart_totals(session_cart):
         'tax': float(tax),
         'total': float(total)
     }
-
+@login_required
 def cart(request):
     cart = get_or_create_cart(request)
     sync_session_with_cart(request, cart)
@@ -197,6 +198,8 @@ def cart(request):
         'cart_item_count': cart_item_count,
         'cart_totals': cart_totals,
     })
+    
+@login_required    
 def add_cart(request, product_id):
     cart = get_or_create_cart(request)
     product = get_object_or_404(Product, id=product_id)
@@ -234,7 +237,7 @@ def add_cart(request, product_id):
     sync_session_with_cart(request, cart)
     messages.success(request, f"{product.product_name} (Color: {color_option or 'N/A'}, Size: {size_option or 'N/A'}) has been added to your cart.")
     return redirect('cart')
-
+@login_required
 def buy_now(request, product_id):
     cart = get_or_create_cart(request)
     product = get_object_or_404(Product, id=product_id)
@@ -271,6 +274,7 @@ def buy_now(request, product_id):
     messages.success(request, f"{product.product_name} (Color: {color_option or 'N/A'}, Size: {size_option or 'N/A'}) has been added to your cart.")
     return redirect('place_order')
 
+@login_required
 def cart_remove(request, product_id):
     cart = get_or_create_cart(request)
     session_cart = request.session.get('cart', {})
@@ -285,7 +289,7 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     messages.success(request, f"{product.product_name} has been removed from your cart.")
     return redirect('cart')
-
+@login_required
 @require_POST
 def increase_cart(request, product_id):
     try:
@@ -325,7 +329,7 @@ def increase_cart(request, product_id):
     except Exception as e:
         logger.error(f"Increase error: {str(e)}")
         return JsonResponse({'success': False, 'error': f"Error: {str(e)}"}, status=500)
-
+@login_required
 @require_POST
 def decrease_cart(request, product_id):
     try:
@@ -368,7 +372,7 @@ def decrease_cart(request, product_id):
         logger.error(f"Decrease error: {str(e)}")
         return JsonResponse({'success': False, 'error': f"Error: {str(e)}"}, status=500)
 
-
+@login_required
 @require_POST
 def remove_cart_item(request, product_id):
     try:
@@ -409,7 +413,7 @@ def redirect_back(request):
     if referer:
         return redirect(referer)
     return redirect('cart')
-
+@login_required
 @require_POST
 def apply_coupon(request):
     try:
@@ -444,7 +448,9 @@ def apply_coupon(request):
             'success': False,
             'error': f"Server error: {str(e)}"
         }, status=500)
-
+        
+        
+@login_required
 def place_order(request):
     try:
         logger.debug("Entering place_order view")
@@ -646,7 +652,10 @@ def place_order(request):
             'success': False,
             'error': f"Server error: {str(e)}"
         }, status=500)
-
+        
+        
+        
+@login_required
 @csrf_exempt
 def verify_payment(request):
     try:
@@ -688,7 +697,7 @@ def verify_payment(request):
     except Exception as e:
         logger.error(f"Unexpected error in verify_payment: {str(e)}")
         return JsonResponse({'success': False, 'error': f'Server error: {str(e)}'}, status=500)
-
+@login_required
 def order_success(request, order_id):
     try:
         order = get_object_or_404(Order, id=order_id)
