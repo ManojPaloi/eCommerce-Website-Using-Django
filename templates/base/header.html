@@ -1,0 +1,789 @@
+{% load static %}
+
+<!-- Google Fonts: Roboto -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<style>
+  header.section-header {
+    background-color: #f5f7fa;
+  }
+  
+  .navbar {
+    background-color: #f5f7fa;
+  }
+  
+  body,
+  .section-header {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f7fa;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #333;
+  }
+  
+  .nav-link:hover {
+    color: #007bff;
+  }
+  
+  .widget-header {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .btn-primary,
+  .btn-outline-primary {
+    border-radius: 20px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  
+  .icon-sm {
+    font-size: 18px;
+    color: #007bff;
+  }
+  
+  .badge-danger {
+    font-size: 0.75rem;
+  }
+  
+  .header-main {
+    background: linear-gradient(90deg, #f5f7fa 0%, #e0e6f0 100%);
+  }
+  
+  .dropdown-menu {
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 16px;
+    box-shadow: 0 12px 36px rgba(31, 38, 135, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    will-change: opacity, transform;
+    min-width: 220px;
+    display: none;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .dropdown-item {
+    color: #333;
+    padding: 12px 24px;
+    transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
+    border-radius: 10px;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(0, 123, 255, 0.08);
+    color: #007bff;
+    transform: translateX(4px);
+  }
+  
+  @media (max-width: 991.98px) {
+    .header-main .row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .header-main .col-lg-2,
+    .header-main .col-lg,
+    .header-main .col-lg-3 {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .category-wrap,
+    .btn-outline-primary,
+    .search,
+    .widget-header {
+      width: 100%;
+      margin-top: 10px;
+    }
+  
+    .search .input-group {
+      flex-direction: row;
+      width: 45%;
+    }
+  
+    .search .form-control {
+      flex: 1;
+    }
+  
+    .search .input-group-input-group-append {
+      width: auto;
+    }
+  
+    .widget-header {
+      text-align: left;
+    }
+  
+    .widget-header .icon {
+      margin-top: 10px;
+    }
+  
+    .navbar-nav {
+      flex-direction: column;
+    }
+  
+    .navbar-nav .nav-item {
+      text-align: left;
+      margin: 5px 0;
+    }
+  
+    .dropdown-menu {
+      position: static;
+      transform: none !important;
+      opacity: 1 !important;
+      backdrop-filter: none;
+      box-shadow: none;
+      background: #fff !important;
+      border: 1px solid #ddd;
+      display: none;
+    }
+  
+    .btn.btn-primary.dropdown-toggle {
+      width: 100%;
+      text-align: left;
+    }
+  
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .navbar {
+      padding: 0.5rem 1rem;
+    }
+  
+    .logo {
+      max-width: 120px;
+      height: auto;
+    }
+  
+    .input-group .form-control,
+    .btn,
+    .dropdown-item {
+      font-size: 14px;
+    }
+  }
+  
+  .widget-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .widget-header:hover {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .widget-header .icon {
+    font-size: 20px;
+    color: #007bff;
+    background-color: #e7f1ff;
+    border: 1.5px solid #007bff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+  
+  .widget-header:hover .icon {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+  
+  .badge.notify {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.35em 0.5em;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: white;
+    box-shadow: 0 0 0 2px white;
+    transition: transform 0.3s ease;
+  }
+  
+  .widget-header:hover .badge.notify {
+    transform: scale(1.1);
+  }
+  
+  .section-content {
+    background-color: #f5f7fa;
+    padding: 2rem 0;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-title {
+    color: #202124;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .cart-item img {
+    max-height: 100px;
+    object-fit: contain;
+    border: 1px solid #e8eaed;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  .cart-item:hover img {
+    transform: scale(1.05);
+  }
+  
+  .cart-item h6 {
+    color: #202124;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .cart-item p.text-muted {
+    color: #5f6368 !important;
+    font-size: 0.9rem;
+  }
+  
+  .cart-item p strong {
+    color: #34a853;
+    font-weight: 600;
+  }
+  
+  .btn-group .btn-outline-secondary {
+    border-color: #dadce0;
+    color: #202124;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-group .btn-outline-secondary:hover {
+    border-color: #1a73e8;
+    color: #1a73e8;
+    background-color: #e8f0fe;
+  }
+  
+  .btn-group .btn-light {
+    border: 1px solid #dadce0;
+    background-color: #f1f3f4;
+    color: #202124;
+    font-size: 0.9rem;
+  }
+  
+  .btn-link.text-danger {
+    color: #d93025 !important;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .btn-link.text-danger:hover {
+    color: #a50e0e !important;
+  }
+  
+  .form-group label {
+    color: #202124;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .form-control,
+  .form-check-input,
+  .phone-input {
+    border: 1px solid #dadce0;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-control:focus,
+  .form-check-input:focus,
+  .phone-input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  }
+  
+  .form-check-label {
+    color: #5f6368;
+    font-size: 0.9rem;
+  }
+  
+  .phone-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .phone-group select {
+    width: 25%;
+  }
+  
+  .phone-group input {
+    width: 75%;
+  }
+  
+  .fa-mobile-screen-button.text-success {
+    color: #34a853 !important;
+  }
+  .fa-credit-card.text-primary {
+    color: #1a73e8 !important;
+  }
+  .fa-paypal.text-info {
+    color: #0070ba !important;
+  }
+  .fa-money-bill-wave.text-dark {
+    color: #202124 !important;
+  }
+  
+  .btn-primary,
+  .btn-outline-primary {
+    background-color: #1a73e8;
+    border-color: #1a73e8;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(26, 115, 232, 0.3);
+  }
+  
+  .btn-primary:hover,
+  .btn-outline-primary:hover {
+    background-color: #1557b0;
+    border-color: #1557b0;
+    box-shadow: 0 4px 10px rgba(21, 87, 176, 0.4);
+    transform: translateY(-2px);
+  }
+  
+  .btn-outline-primary {
+    background-color: transparent;
+    color: #1a73e8;
+  }
+  
+  .btn-outline-primary:hover {
+    color: #fff;
+  }
+  
+  .dlist-align dt {
+    color: #202124;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .dlist-align dd {
+    color: #5f6368;
+    font-size: 0.9rem;
+  }
+  
+  .dlist-align dd.text-success {
+    color: #34a853 !important;
+  }
+  
+  .dlist-align dd.text-dark {
+    color: #202124 !important;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 991.98px) {
+    .card-title {
+      font-size: 1.3rem;
+    }
+  
+    .cart-item img {
+      max-height: 80px;
+    }
+  
+    .cart-item h6 {
+      font-size: 0.95rem;
+    }
+  
+    .cart-item p {
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media (max-width: 767.98px) {
+    .card-title {
+      font-size: 1.2rem;
+    }
+  
+    .cart-item img {
+      max-height: 70px;
+    }
+  
+    .cart-item h6 {
+      font-size: 0.9rem;
+    }
+  
+    .cart-item p {
+      font-size: 0.8rem;
+    }
+  
+    .btn-group .btn-sm,
+    .btn-link.btn-sm {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+    }
+  
+    .form-group label,
+    .form-control,
+    .form-check-label,
+    .dlist-align dt,
+    .dlist-align dd {
+      font-size: 0.85rem;
+    }
+  
+    .phone-group select {
+      width: 30%;
+    }
+  
+    .phone-group input {
+      width: 70%;
+    }
+  }
+  
+  @media (max-width: 575.98px) {
+    .card-title {
+      font-size: 1.1rem;
+    }
+  
+    .cart-item img {
+      max-height: 60px;
+    }
+  
+    .cart-item h6 {
+      font-size: 0.85rem;
+    }
+  
+    .cart-item p {
+      font-size: 0.75rem;
+    }
+  
+    .btn-group .btn-sm,
+    .btn-link.btn-sm {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+    }
+  
+    .form-group label,
+    .form-control,
+    .form-check-label,
+    .dlist-align dt,
+    .dlist-align dd {
+      font-size: 0.8rem;
+    }
+  
+    .phone-group select {
+      width: 35%;
+    }
+  
+    .phone-group input {
+      width: 65%;
+    }
+  }
+  
+  .three-dot-menu .fa-box {
+    color: #28a745 !important;
+  }
+  .three-dot-menu .fa-heart {
+    color: #dc3545 !important;
+  }
+  
+  .auth-links {
+    font-family: Arial, sans-serif;
+  }
+  
+  .auth-links a {
+    text-decoration: none;
+    color: inherit;
+    padding: 5px 10px;
+  }
+  
+  .auth-links a:hover {
+    background-color: #e6e6e6; /* Light grey hover effect */
+  }
+  
+  .text-primary {
+    color: #005566; /* Dark teal for Sign in */
+  }
+  
+  .text-success {
+    color: #2e7d32; /* Dark green for Register */
+  }
+  
+  .mr-2 {
+    margin-right: 8px; /* Consistent spacing */
+  }
+  
+  .fas.fa-user,
+  .fas.fa-user-plus {
+    font-size: 14px; /* Matches typical default text size for icons */
+  }
+  
+  /* New styles for Login and Sign Up buttons to match authenticated dropdown */
+  .auth-links .dropdown-item.login-btn {
+    color: #005566; /* Match text-primary */
+    padding: 12px 24px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
+  }
+  
+  .auth-links .dropdown-item.signup-btn {
+    color: #2e7d32; /* Match text-success */
+    padding: 12px 24px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
+  }
+  
+  .auth-links .dropdown-item.login-btn:hover {
+    background-color: rgba(0, 123, 255, 0.08); /* Match authenticated dropdown hover */
+    color: #007bff;
+    transform: translateX(4px);
+  }
+  
+  .auth-links .dropdown-item.signup-btn:hover {
+    background-color: rgba(0, 123, 255, 0.08); /* Match authenticated dropdown hover */
+    color: #007bff;
+    transform: translateX(4px);
+  }
+  
+  .auth-links .dropdown-item i {
+    font-size: 14px; /* Match authenticated dropdown icon size */
+    margin-right: 8px; /* Consistent spacing */
+    transition: transform 0.1s ease;
+  }
+  
+  .auth-links .dropdown-item:hover i {
+    transform: scale(1.1); /* Stylish icon animation */
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdowns = document.querySelectorAll('.dropdown')
+  
+    dropdowns.forEach((dropdown) => {
+      const menu = dropdown.querySelector('.dropdown-menu')
+      let timeoutId
+  
+      // Function to open dropdown
+      const openDropdown = () => {
+        clearTimeout(timeoutId)
+        menu.style.display = 'block'
+        setTimeout(() => {
+          menu.style.opacity = '1'
+          menu.style.transform = 'translateY(0)'
+          menu.style.pointerEvents = 'auto'
+        }, 10)
+      }
+  
+      // Function to close dropdown
+      const closeDropdown = () => {
+        timeoutId = setTimeout(() => {
+          menu.style.opacity = '0'
+          menu.style.transform = 'translateY(10px)'
+          menu.style.pointerEvents = 'none'
+          setTimeout(() => {
+            menu.style.display = 'none'
+          }, 250)
+        }, 100)
+      }
+  
+      // Hover events
+      dropdown.addEventListener('mouseenter', openDropdown)
+      dropdown.addEventListener('mouseleave', closeDropdown)
+  
+      // Click event for toggle (mobile or click-based interaction)
+      const toggle = dropdown.querySelector('.dropdown-toggle, .widget-header')
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault()
+        if (menu.style.display === 'block' && menu.style.opacity === '1') {
+          closeDropdown()
+        } else {
+          openDropdown()
+        }
+      })
+  
+      // Close dropdown when clicking a dropdown item
+      menu.querySelectorAll('.dropdown-item').forEach((item) => {
+        item.addEventListener('click', closeDropdown)
+      })
+    })
+  
+    // Disable search button if input is empty
+    const searchInput = document.querySelector('form.search input[name="keyword"]')
+    const searchButton = document.querySelector('form.search button[type="submit"]')
+  
+    function toggleSearchButton() {
+      if (searchInput.value.trim() === '') {
+        searchButton.disabled = true
+        searchButton.style.cursor = 'not-allowed'
+        searchButton.style.opacity = 0.6
+      } else {
+        searchButton.disabled = false
+        searchButton.style.cursor = 'pointer'
+        searchButton.style.opacity = 1
+      }
+    }
+  
+    toggleSearchButton()
+    searchInput.addEventListener('input', toggleSearchButton)
+  })
+</script>
+
+<header class="section-header">
+  <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarTop4">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a href="#" class="nav-link">English</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">USD</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="#" class="nav-link"><i class="fa fa-envelope"></i> Email</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link"><i class="fa fa-phone"></i> Call us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="header-main border-bottom">
+    <div class="container">
+      <div class="row align-items-center py-2">
+        <div class="col-lg-2 col-md-3 col-6">
+          <a href="{% url 'home' %}" class="brand-wrap"><img class="logo" src="{% static 'images/logo.jpg.png.png' %}" alt="Company Logo" /></a>
+        </div>
+
+        <div class="col-lg col-sm col-md col-6 flex-grow-0">
+          <div class="category-wrap dropdown d-inline-block float-right">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color=''"><i class="fa fa-bars"></i> All Categories</button>
+            <div class="dropdown-menu">
+              {% for category in links %}
+                <a class="dropdown-item" href="{% url 'products_by_category' category.slug %}">{{ category.category_name }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <a href="{% url 'store' %}" class="btn btn-outline-primary ml-2" style="transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color=''">Store</a>
+
+        <div class="col-lg col-md-6 col-sm-12 mt-2 mt-md-0">
+          <form action="{% url 'search' %}" method="GET" class="search">
+            <div class="input-group w-100">
+              <input type="text" name="keyword" class="form-control" placeholder="Search" value="{{ keyword|default:'' }}" />
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" style="transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color=''"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+          <div class="d-flex justify-content-end mb-3 mb-lg-0">
+            <div class="widget-header text-right mr-3 position-relative">
+              {% if user.is_authenticated %}
+                <div class="dropdown d-inline-block">
+                  <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: 500;">
+                    <i class="fas fa-user-circle mr-2" style="font-size: 20px;"></i>
+                    <span class="text-dark">{{ user.username }}</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right mt-2 shadow" aria-labelledby="userMenu" style="min-width: 200px;">
+                    <a class="dropdown-item" href="{% url 'my_account' %}"><i class="fas fa-user mr-2 text-primary"></i> My Account</a>
+                    <a class="dropdown-item" href="{% url 'about_us' %}"><i class="fas fa-info-circle mr-2 text-info"></i> About Us</a>
+                    <a class="dropdown-item" href="{% url 'contact_us' %}"><i class="fas fa-envelope mr-2 text-success"></i> Contact Us</a>
+                    <form method="POST" action="{% url 'logout' %}" class="dropdown-item p-0 m-0">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-link dropdown-item text-left"><i class="fas fa-sign-out-alt mr-2 text-danger"></i> Logout</button>
+                    </form>
+                  </div>
+                </div>
+              {% else %}
+                <div class="dropdown d-inline-block auth-links">
+                  <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle" id="authMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: 500;">
+                    <i class="fas fa-user-circle mr-2" style="font-size: 20px; color: #005566;"></i>
+                    <span class="text-dark">Login</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right mt-2 shadow" aria-labelledby="authMenu" style="min-width: 200px;">
+                    <a class="dropdown-item login-btn" href="{% url 'login' %}"><i class="fas fa-sign-in-alt mr-2 text-primary"></i> Login</a>
+                    <a class="dropdown-item signup-btn" href="{% url 'signup' %}"><i class="fas fa-user-plus mr-2 text-success"></i> Sign Up</a>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+
+            <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3 position-relative">
+              <div class="icon icon-sm rounded-circle border d-flex align-items-center justify-content-center">
+                <i class="fa fa-shopping-cart"></i>
+              </div>
+              <span class="badge badge-pill badge-danger notify" id="cart-count">{{ total_quantity|default:0 }}</span>
+            </a>
+
+            <div class="dropdown d-inline-block ml-3 three-dot-menu">
+              <a href="#" class="widget-header" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="icon icon-sm rounded-circle border d-flex align-items-center justify-content-center">
+                  <i class="fas fa-ellipsis-v"></i>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right mt-2 shadow" style="min-width: 200px;">
+                <a class="dropdown-item" href="{% url 'my_orders' %}"><i class="fas fa-box mr-2"></i> My Orders</a>
+                <a class="dropdown-item" href="{% url 'wishlist' %}"><i class="fas fa-heart mr-2"></i> Wishlist</a>
+                <a class="dropdown-item" href="{% url 'customer_support' %}"><i class="fas fa-headset mr-2"></i> Customer Support</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</header>

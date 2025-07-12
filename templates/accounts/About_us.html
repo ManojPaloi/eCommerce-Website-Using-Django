@@ -1,0 +1,457 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- AOS + Font Awesome -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({ once: true, duration: 800, easing: 'ease-in-out' });
+</script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    color: #212529;
+  }
+
+  /* Hero */
+  .about-hero {
+    background-color: #f4f6fa;
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  .about-hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 12px;
+  }
+
+  .about-hero p {
+    font-size: 1.15rem;
+    color: #555;
+    margin-bottom: 30px;
+  }
+
+  .btn-primary-cta {
+    background-color: #2874f0;
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    font-size: 1.05rem;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgb(40 116 240 / 0.4);
+    transition: background-color 0.3s ease, transform 0.25s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary-cta:hover {
+    background-color: #185ad6;
+    transform: translateY(-3px);
+  }
+
+  .about-section {
+    padding: 60px 15px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #212529;
+    text-align: center;
+    margin-bottom: 48px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Mission Cards */
+  .card-grid {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .card-box {
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgb(0 0 0 / 0.07);
+    text-align: center;
+    width: 280px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: default;
+  }
+
+  .card-box:hover {
+    box-shadow: 0 14px 40px rgb(40 116 240 / 0.2);
+    transform: translateY(-6px);
+  }
+
+  .card-box i {
+    font-size: 2.8rem;
+    color: #2874f0;
+    margin-bottom: 20px;
+  }
+
+  .card-box h5 {
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+  }
+
+  .card-box p {
+    color: #666;
+    font-size: 1rem;
+  }
+
+  /* Stats Section (Our Growth) */
+  .stats-section {
+    background-color: #e8f0fe; /* lighter cool blue */
+    padding: 50px 15px;
+    border-radius: 14px;
+    box-shadow: 0 6px 25px rgb(40 116 240 / 0.15);
+    max-width: 900px;
+    margin: 60px auto 80px;
+  }
+
+  .stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    background: #fff;
+    flex: 1 1 160px;
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 30px rgb(40 116 240 / 0.08);
+    text-align: center;
+    cursor: default;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .stat-box:hover {
+    transform: scale(1.07);
+    box-shadow: 0 16px 45px rgb(40 116 240 / 0.25);
+  }
+
+  .stat-icon {
+    font-size: 3.2rem;
+    color: #2874f0;
+    margin-bottom: 15px;
+  }
+
+  .stat-number {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #1a237e;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .stat-label {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #444;
+    letter-spacing: 0.04em;
+  }
+
+  /* Creator Section */
+  .creator-photo {
+    border-radius: 50%;
+    border: 4px solid #2874f0;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(40, 116, 240, 0.35);
+    margin-bottom: 18px;
+    transition: transform 0.3s ease;
+  }
+
+  .creator-photo:hover {
+    transform: scale(1.08);
+  }
+
+  .creator-box {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 80px;
+  }
+
+  .creator-box h4 {
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 6px;
+    font-size: 1.8rem;
+  }
+
+  .creator-box p.text-muted {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  /* Social Icons */
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+  }
+
+  .social-icon {
+    background: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 18px rgb(0 0 0 / 0.1);
+    transition: background-color 0.3s ease, transform 0.25s ease;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .social-icon:hover {
+    background: #185ad6;
+    transform: scale(1.15);
+  }
+
+  .social-icon i {
+    color: #2874f0;
+    font-size: 22px;
+    transition: color 0.3s ease;
+  }
+
+  .social-icon:hover i {
+    color: white;
+  }
+
+  .tooltip-text {
+    position: absolute;
+    bottom: 65px;
+    background: #333;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .social-icon:hover .tooltip-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="about-hero">
+  <div class="container">
+    <h1 data-aos="fade-down">About Us</h1>
+    <p data-aos="fade-up" data-aos-delay="100">Passionate about cooking. Dedicated to delivering quality.</p>
+    <button class="btn-primary-cta" data-aos="zoom-in" data-aos-delay="200" onclick="document.getElementById('creator').scrollIntoView({ behavior: 'smooth' })">Meet the Creator</button>
+  </div>
+</section>
+
+<!-- Our Mission -->
+<section class="about-section">
+  <h2 class="section-title" data-aos="fade-up">Our Mission</h2>
+  <div class="card-grid">
+    <div class="card-box" data-aos="zoom-in">
+      <i class="fas fa-utensils"></i>
+      <h5>Simplify Cooking</h5>
+      <p>Tools, ingredients & recipes in one place.</p>
+    </div>
+    <div class="card-box" data-aos="zoom-in" data-aos-delay="100">
+      <i class="fas fa-truck"></i>
+      <h5>Fast Delivery</h5>
+      <p>Efficient, reliable, and always on time.</p>
+    </div>
+    <div class="card-box" data-aos="zoom-in" data-aos-delay="200">
+      <i class="fas fa-user-shield"></i>
+      <h5>Customer Trust</h5>
+      <p>We care. Every order, every user.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section (Our Growth) -->
+<section class="stats-section" aria-label="Platform statistics" data-aos="fade-up">
+  <h2 class="section-title" style="color: #1a237e;">Our Growth</h2>
+  <div class="stats-grid">
+    <div class="stat-box" data-aos="zoom-in" data-aos-delay="100">
+      <div class="stat-icon"><i class="fas fa-users"></i></div>
+      <div class="stat-number" data-plus="true">25K+</div>
+      <div class="stat-label">Total Users</div>
+    </div>
+    <div class="stat-box" data-aos="zoom-in" data-aos-delay="200">
+      <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+      <div class="stat-number" data-plus="true">75K+</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-box" data-aos="zoom-in" data-aos-delay="300">
+      <div class="stat-icon"><i class="fas fa-box-open"></i></div>
+      <div class="stat-number" data-plus="true">1.5K+</div>
+      <div class="stat-label">Products Available</div>
+    </div>
+    <div class="stat-box" data-aos="zoom-in" data-aos-delay="400">
+      <div class="stat-icon"><i class="fas fa-star"></i></div>
+      <div class="stat-number">4.8/5</div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- Meet the Creator -->
+<section class="about-section creator-section" id="creator" style="background-color: #f4f6fa; padding: 80px 0;">
+  <h2 class="section-title" data-aos="zoom-in">Meet the Creator</h2>
+  <div class="creator-box" data-aos="fade-up" style="text-align: center; max-width: 620px; margin: 0 auto;">
+    
+    <!-- Full Image Cover -->
+    <img src="{% static 'images/manoj.jpg.png' %}" 
+         alt="Manoj Paloi" 
+         style="
+           width: 100%;
+           max-width: 350px;
+           height: auto;
+           display: block;
+           margin: 0 auto 24px;
+           border-radius: 20px;
+           object-fit: cover;
+           background-color: #e6f0ff;
+           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+           transition: transform 0.3s ease;
+         "
+         onmouseover="this.style.transform='scale(1.05)'" 
+         onmouseout="this.style.transform='scale(1)'" 
+    />
+
+    <h4 style="font-weight: 700; color: #212529; margin-bottom: 6px; font-size: 1.8rem;">Manoj Paloi</h4>
+    <p class="text-muted" style="color: #666; font-size: 1rem; margin-bottom: 16px;">Founder • Full Stack Developer</p>
+    <p style="color: #333;">
+      I'm a passionate developer combining tech and creativity to make cooking and shopping delightful. 
+      This platform is my vision to empower home chefs and everyday users with tools that matter.
+    </p>
+
+    <!-- Social Icons -->
+    <div class="social-icons">
+  <div class="social-icon" onclick="window.open('https://github.com/ManojPaloi','_blank')" role="button" tabindex="0" aria-label="GitHub">
+    <i class="fab fa-github"></i>
+    <span class="tooltip-text">GitHub</span>
+  </div>
+  <div class="social-icon" onclick="window.open('https://www.linkedin.com/in/manoj-paloi/','_blank')" role="button" tabindex="0" aria-label="LinkedIn">
+    <i class="fab fa-linkedin-in"></i>
+    <span class="tooltip-text">LinkedIn</span>
+  </div>
+  <div class="social-icon" onclick="window.location.href='mailto:paloimanoj@gmail.com'" role="button" tabindex="0" aria-label="Email">
+    <i class="fas fa-envelope"></i>
+    <span class="tooltip-text">Email</span>
+  </div>
+  <div class="social-icon" onclick="window.open('https://x.com/PaloiManoj','_blank')" role="button" tabindex="0" aria-label="Twitter">
+    <i class="fab fa-twitter"></i>
+    <span class="tooltip-text">Twitter</span>
+  </div>
+</div>
+
+  </div>
+</section>
+
+
+<script>
+  // Animate count-up numbers for stats
+  function animateCount(el, target, duration = 2000) {
+    let start = 0;
+    let startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const current = Math.floor(progress * target);
+      // Format with commas for thousands
+      el.textContent = current.toLocaleString() + (el.dataset.plus ? '+' : '');
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toLocaleString() + (el.dataset.plus ? '+' : '');
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function isInViewport(elem) {
+    const rect = elem.getBoundingClientRect();
+    return (
+      rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom >= 0
+    );
+  }
+
+  const statNumbers = document.querySelectorAll('.stat-number');
+  let counted = false;
+
+  function tryAnimateStats() {
+    const statsSection = document.querySelector('.stats-section');
+    if (!counted && isInViewport(statsSection)) {
+      counted = true;
+      statNumbers.forEach(el => {
+        let targetText = el.textContent.replace(/[^\d\.]/g,''); // Remove non-numeric except dot
+        let target = parseFloat(targetText) || 0;
+        // Convert K to thousand for integers only
+        if (el.textContent.includes('K')) target *= 1000;
+        animateCount(el, target);
+      });
+      window.removeEventListener('scroll', tryAnimateStats);
+    }
+  }
+  window.addEventListener('scroll', tryAnimateStats);
+  // Try once on load
+  tryAnimateStats();
+
+  // Copy Email to clipboard + Tooltip feedback
+  const emailIcon = document.querySelector('.social-icon[aria-label="Email"]');
+  const tooltip = emailIcon.querySelector('.tooltip-text');
+  const emailAddress = 'manoj@example.com';
+
+  emailIcon.addEventListener('click', () => {
+    navigator.clipboard.writeText(emailAddress).then(() => {
+      const oldText = tooltip.textContent;
+      tooltip.textContent = 'Copied!';
+      setTimeout(() => tooltip.textContent = oldText, 2000);
+    }).catch(() => {
+      tooltip.textContent = 'Failed!';
+      setTimeout(() => tooltip.textContent = 'Email', 2000);
+    });
+  });
+
+  // Keyboard accessibility for social icons (trigger click on Enter or Space key)
+  document.querySelectorAll('.social-icon[role="button"]').forEach(icon => {
+    icon.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        icon.click();
+      }
+    });
+  });
+
+  // Smooth scroll for Meet the Creator button (in case older browsers)
+  document.querySelector('.btn-primary-cta').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('creator').scrollIntoView({behavior: 'smooth'});
+  });
+</script>
+
+{% endblock %}

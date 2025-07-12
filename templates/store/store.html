@@ -1,0 +1,890 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <!-- ========================= SECTION PAGETOP ========================= -->
+  <section class="section-pagetop bg-light border-bottom py-4">
+    <style>
+        .apply-btn {
+    color: white;
+  }
+
+  .apply-btn:hover {
+    color: #fff !important; /* 👈 ensures text stays white on hover */
+  }
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      .breadcrumb a {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      .breadcrumb a:hover {
+        color: #0056b3;
+        text-decoration: none;
+      }
+
+      /* Button base style */
+      .btn-success {
+        background-color: #28a745;
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(40, 167, 69, 0.4);
+        border-radius: 5px;
+      }
+
+      /* Hover effect: brighten + scale */
+      .btn-success:hover {
+        background-color: #218838;
+        box-shadow: 0 6px 10px rgba(33, 136, 56, 0.6);
+        transform: scale(1.05);
+        text-decoration: none;
+      }
+
+      /* Fade-in and scale animation */
+      @keyframes fadeInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Apply animation */
+      .wow-button {
+        animation: fadeInScale 0.8s ease forwards;
+      }
+
+      .btn-success.wow-button {
+        background-color: #28a745; /* Bootstrap green */
+        color: white;
+        border: 1px solid #28a745;
+        transition: all 0.3s ease;
+      }
+
+      .active-category {
+        color: #fff;
+        background-color: #007bff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+
+      .category-item {
+        border: none;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        background-color: #f8f9fa;
+      }
+
+      .category-item:hover {
+        background-color: #e2e6ea;
+        transform: translateX(5px);
+      }
+
+      .category-item.active {
+        background-color: #0d6efd;
+        color: white;
+        font-weight: 500;
+      }
+
+      .category-item.active .category-link {
+        color: white;
+      }
+
+      .category-link {
+        text-decoration: none;
+        color: #212529;
+        font-weight: 500;
+      }
+
+      .category-link:hover {
+        color: #0d6efd;
+      }
+
+      .hover-shadow:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-4px);
+      }
+
+      /* Product Card Styling */
+      .card-product-grid {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .img-wrap {
+        background-color: #f8f9fa;
+        position: relative; /* For positioning wishlist button */
+      }
+
+      .info-wrap {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem !important;
+        overflow: visible;
+        min-height: 120px;
+      }
+
+      .title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.4;
+        max-height: 3rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-bottom: 0.5rem;
+      }
+
+      .title:hover {
+        color: #007bff;
+      }
+
+      /* Updated Category Display Styling for Compact Badge Look */
+      .category {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #555;
+        background-color: #f1f3f5; /* Light gray background for badge-like look */
+        border: 1px solid #e9ecef;
+        border-radius: 12px; /* More rounded for pill shape */
+        padding: 4px 8px; /* Adjusted padding for tighter fit */
+        display: inline-flex;
+        align-items: center;
+        width: fit-content; /* Ensures background only wraps content */
+        margin-bottom: 0.5rem;
+      }
+
+      .category-label {
+        font-weight: 700; /* Bolder for "Category:" */
+        color: #212529; /* Darker color for emphasis */
+      }
+
+      /* Price Display Styling (Flipkart Style) */
+      .price-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        min-height: 1.5rem;
+        margin-top: 0.25rem;
+      }
+      .discounted-price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #212121;
+      }
+      .mrp-price {
+        font-size: 0.9rem;
+        color: #878787;
+      }
+      .mrp-price small {
+        font-size: 0.85rem;
+      }
+      .mrp-price del {
+        color: #878787;
+        font-size: 0.9rem;
+      }
+      .discount-percentage {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #388e3c;
+      }
+
+      /* Same-Day Delivery Badge */
+      .same-day-badge {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #fff;
+        background-color: #007bff;
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 4px;
+      }
+
+      /* Action Buttons Container (Flipkart Style) */
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 1rem;
+        flex-wrap: nowrap;
+      }
+
+      /* Style for both buttons */
+      .action-buttons form,
+      .action-buttons a {
+        flex: 1; /* Equal width for both buttons */
+        margin: 0; /* Remove default margin from form */
+      }
+
+      .action-buttons .btn {
+        width: 100%;
+        padding: 8px 0; /* Consistent padding */
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+        border-radius: 50px; /* Rounded pill shape */
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px; /* Space between icon and text */
+      }
+
+      /* Add to Cart Button */
+      .btn-outline-primary {
+        border: 2px solid #2874f0; /* Flipkart blue */
+        color: #2874f0;
+        background-color: #fff;
+      }
+      .btn-outline-primary:hover {
+        background-color: #2874f0;
+        color: #fff;
+        border-color: #2874f0;
+      }
+
+      /* Buy Now Button */
+      .btn-warning {
+        background-color: #fb641b; /* Flipkart orange */
+        border: none;
+        color: #fff;
+      }
+      .btn-warning:hover {
+        background-color: #f85606;
+        color: #fff;
+      }
+
+      /* Ensure row doesn't force uniform height */
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+      }
+
+      .col-md-4 {
+        display: flex;
+      }
+
+      /* Footer Fixes */
+      footer.section-footer {
+        width: 100%;
+        overflow: hidden; /* Prevent horizontal overflow */
+      }
+
+      footer .container {
+        max-width: 100%; /* Ensure it respects parent width */
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      /* Fix for footer-bottom contact info */
+      .footer-bottom {
+        flex-wrap: wrap; /* Ensure columns wrap properly */
+        align-items: center; /* Center items vertically */
+      }
+
+      .footer-bottom .col-md-4 {
+        flex: 1 1 100%; /* Stack columns on small screens */
+        max-width: 100%;
+        margin-bottom: 1rem;
+        text-align: center !important; /* Force center alignment on all screens */
+      }
+
+      .footer-bottom .col-md-4.text-md-center {
+        display: flex;
+        flex-direction: column; /* Stack contact info vertically */
+        align-items: center;
+        gap: 0.5rem; /* Space between items */
+      }
+
+      .footer-bottom .col-md-4.text-md-center span {
+        display: block; /* Each span on a new line */
+        word-break: break-word; /* Force text to wrap */
+        overflow-wrap: break-word; /* Modern alternative */
+        white-space: normal; /* Ensure text wraps */
+      }
+
+      .footer-bottom .col-md-4.text-md-right {
+        display: flex;
+        justify-content: center; /* Center payment icons */
+        gap: 1rem; /* Space between icons */
+      }
+
+      @media (min-width: 768px) {
+        .footer-bottom .col-md-4 {
+          flex: 0 0 33.333333%;
+          max-width: 33.333333%;
+          margin-bottom: 0;
+        }
+        .footer-bottom .col-md-4.text-md-center {
+          flex-direction: row; /* Horizontal layout on larger screens */
+          gap: 1rem;
+          flex-wrap: wrap; /* Allow wrapping if needed */
+          justify-content: center;
+        }
+        .footer-bottom .col-md-4.text-md-right {
+          justify-content: flex-end; /* Restore right alignment on larger screens */
+        }
+      }
+
+      /* Responsive Adjustments for Store Content */
+      @media (max-width: 767.98px) {
+        .title {
+          font-size: 1rem;
+          max-height: 2.8rem;
+        }
+        .discounted-price {
+          font-size: 1.1rem;
+        }
+        .mrp-price,
+        .mrp-price del {
+          font-size: 0.85rem;
+        }
+        .mrp-price small {
+          font-size: 0.8rem;
+        }
+        .discount-percentage {
+          font-size: 0.85rem;
+        }
+        .price-wrap {
+          gap: 4px;
+          min-height: 1.4rem;
+        }
+        .same-day-badge {
+          font-size: 0.7rem;
+        }
+        .info-wrap {
+          padding: 0.75rem !important;
+          min-height: 100px;
+        }
+        /* Stack buttons on smaller screens */
+        .action-buttons {
+          flex-direction: column;
+          gap: 8px;
+        }
+        .action-buttons .btn {
+          font-size: 0.85rem;
+          padding: 6px 0;
+        }
+        /* Updated responsive styling for category */
+        .category {
+          font-size: 0.8rem;
+          padding: 3px 6px;
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        .title {
+          font-size: 0.9rem;
+          max-height: 2.6rem;
+        }
+        .discounted-price {
+          font-size: 1rem;
+        }
+        .mrp-price,
+        .mrp-price del {
+          font-size: 0.8rem;
+        }
+        .mrp-price small {
+          font-size: 0.75rem;
+        }
+        .discount-percentage {
+          font-size: 0.8rem;
+        }
+        .price-wrap {
+          gap: 3px;
+          min-height: 1.3rem;
+        }
+        .same-day-badge {
+          font-size: 0.65rem;
+        }
+        .img-wrap img {
+          height: 180px;
+        }
+        .info-wrap {
+          min-height: 100px;
+        }
+        .action-buttons .btn {
+          font-size: 0.8rem;
+          padding: 5px 0;
+        }
+        /* Updated responsive styling for category */
+        .category {
+          font-size: 0.75rem;
+          padding: 2px 4px;
+        }
+      }
+
+      /* Wishlist Button Styling */
+      .wishlist-btn {
+        position: absolute;
+        top: 10px; /* Moved to top-right corner */
+        right: 10px;
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        text-shadow: 0 0 4px rgba(255, 255, 255, 0.8); /* Subtle glow for visibility */
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+
+      .wishlist-btn:hover {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
+
+      .wishlist-btn i {
+        font-size: 20px;
+        color: #adb5bd; /* Grey for unfilled state */
+        transition: color 0.3s ease, transform 0.3s ease;
+      }
+
+      .wishlist-btn.active i {
+        color: #dc3545; /* Red for filled state */
+        transform: scale(1.1); /* Slight pulse on activation */
+      }
+
+      /* Pulse animation on click */
+      .wishlist-btn.active {
+        animation: pulse 0.3s ease;
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1.1); }
+      }
+
+      .wishlist-btn {
+        background-color: #ffffff; /* Always white background */
+        border: none;
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        color: #888888; /* Default icon color */
+      }
+
+      .wishlist-btn:hover {
+        color: #e53935; /* Red on hover for feedback */
+      }
+
+      .wishlist-btn.active i {
+        color: #e53935; /* Red heart when active (added) */
+      }
+
+      .wishlist-btn i {
+        font-size: 18px;
+        transition: color 0.3s ease;
+      }
+    </style>
+
+  <script>
+  // Utility function to get CSRF token from cookies
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Create alert container for notifications
+    const alertContainer = document.createElement('div');
+    alertContainer.style.position = 'fixed';
+    alertContainer.style.top = '20px';
+    alertContainer.style.left = '50%';
+    alertContainer.style.transform = 'translateX(-50%)';
+    alertContainer.style.zIndex = '1000';
+    alertContainer.style.width = '90%';
+    alertContainer.style.maxWidth = '500px';
+    document.body.appendChild(alertContainer);
+
+    // Function to show alert with optional duration
+    function showAlert(message, type = 'success', duration = 3000) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type} alert-dismissible fade show text-center`;
+      alertDiv.role = 'alert';
+      alertDiv.style.borderRadius = '8px';
+      alertDiv.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+      alertDiv.style.padding = '15px';
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      `;
+      alertContainer.appendChild(alertDiv);
+      setTimeout(() => {
+        alertDiv.classList.remove('show');
+        alertDiv.classList.add('fade');
+        setTimeout(() => alertDiv.remove(), 150);
+      }, duration);
+    }
+
+    // Initialize wishlist buttons based on current wishlist state
+    const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+    wishlistButtons.forEach(button => {
+      const productId = button.getAttribute('data-product-id');
+      // Check if the product is in the wishlist and set the initial state
+      if (wishlist.some(item => item.id === productId)) {
+        button.classList.add('active');
+        button.querySelector('i').classList.remove('far');
+        button.querySelector('i').classList.add('fas');
+      } else {
+        button.classList.remove('active');
+        button.querySelector('i').classList.remove('fas');
+        button.querySelector('i').classList.add('far');
+      }
+
+      // Handle wishlist button clicks
+      button.addEventListener('click', function() {
+        try {
+          const productId = this.getAttribute('data-product-id');
+          const isActive = this.classList.contains('active');
+          const productCard = this.closest('.card-product-grid');
+          const productImage = productCard.querySelector('img').src;
+          const productName = productCard.querySelector('.title').textContent;
+          const productPrice = productCard.querySelector('.discounted-price').textContent.replace('₹', '');
+          const productOriginalPrice = productCard.querySelector('.mrp-price del') ?
+            productCard.querySelector('.mrp-price del').textContent.replace('₹', '') : productPrice;
+          const discountPercentage = productCard.querySelector('.discount-percentage') ?
+            productCard.querySelector('.discount-percentage').textContent : '';
+          const isSameDayDelivery = productCard.querySelector('.same-day-badge') ? true : false;
+          const productUrl = productCard.querySelector('.title').href;
+
+          // Robustly extract slugs from URL
+          const urlParts = productUrl.split('/').filter(part => part);
+          const categorySlugIndex = urlParts.indexOf('category') + 1;
+          const productSlugIndex = categorySlugIndex + 1;
+
+          if (categorySlugIndex >= urlParts.length || productSlugIndex >= urlParts.length) {
+            throw new Error('Invalid product URL structure');
+          }
+
+          const categorySlug = urlParts[categorySlugIndex];
+          const productSlug = urlParts[productSlugIndex];
+
+          // Validate slugs
+          if (!categorySlug || !productSlug || categorySlug === 'store' || productSlug === 'category') {
+            throw new Error('Invalid category or product slug');
+          }
+
+          const category = productCard.querySelector('.category').textContent.replace('Category: ', '').trim();
+
+          // Get current wishlist from local storage
+          wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+          if (isActive) {
+            // Remove from wishlist
+            wishlist = wishlist.filter(item => item.id !== productId);
+            this.classList.remove('active');
+            this.querySelector('i').classList.remove('fas');
+            this.querySelector('i').classList.add('far');
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            showAlert('Product removed from wishlist successfully!', 'danger');
+          } else {
+            // Add to wishlist
+            const product = {
+              id: productId,
+              name: productName,
+              price: productPrice,
+              originalPrice: productOriginalPrice,
+              discountPercentage: discountPercentage,
+              imageUrl: productImage,
+              categorySlug: categorySlug,
+              productSlug: productSlug,
+              isSameDayDelivery: isSameDayDelivery,
+              category: category
+            };
+
+            if (!wishlist.some(item => item.id === productId)) {
+              wishlist.push(product);
+              localStorage.setItem('wishlist', JSON.stringify(wishlist));
+              this.classList.add('active');
+              this.querySelector('i').classList.remove('far');
+              this.querySelector('i').classList.add('fas');
+              showAlert('Product added to wishlist successfully!', 'success');
+            } else {
+              throw new Error('Product already in wishlist');
+            }
+          }
+        } catch (error) {
+          showAlert('Error: ' + error.message, 'danger');
+        }
+      });
+    });
+  });
+</script>
+    <div class="container">
+      <h2 class="title-page mb-1" style="font-weight: 600; font-size: 2rem; color: #333;">Our Store</h2>
+      <nav aria-label="breadcrumb" style="font-size: 0.9rem; color: #666;">
+        <ol class="breadcrumb bg-transparent p-0 mb-0">
+          <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page" style="color: #555;">Store</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ========================= SECTION INTRO END// ========================= -->
+
+  <!-- ========================= SECTION CONTENT ========================= -->
+  <section class="section-content padding-y">
+    <div class="container">
+      <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-md-3">
+          <div class="card">
+            <!-- Categories Filter -->
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
+                  <i class="icon-control fa fa-chevron-down"></i>
+                  <h6 class="title">Categories</h6>
+                </a>
+              </header>
+              <div class="filter-content collapse show" id="collapse_1">
+                <div class="card-body">
+                  <ul class="list-group">
+                    {% for category in categories %}
+                      <li class="list-group-item category-item {% if category.slug == current_category_slug %}active{% endif %}">
+                        <a href="{% url 'products_by_category' category.slug %}" class="category-link d-block w-100">{{ category.category_name }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <!-- Sizes Filter -->
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true">
+                  <i class="icon-control fa fa-chevron-down"></i>
+                  <h6 class="title">Sizes</h6>
+                </a>
+              </header>
+              <div class="filter-content collapse show" id="collapse_4">
+                <div class="card-body">
+                  <form method="get" action="{% url 'store' %}">
+                    {% for size in sizes_list %}
+                      <label class="checkbox-btn">
+                        {% if selected_sizes and size in selected_sizes %}
+                          <input type="checkbox" name="sizes" value="{{ size }}" checked="checked" />
+                        {% else %}
+                          <input type="checkbox" name="sizes" value="{{ size }}" />
+                        {% endif %}
+                        <span class="btn btn-light">{{ size }}</span>
+                      </label>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-block btn-primary mt-3 apply-btn">Apply</button>
+                  </form>
+                </div>
+              </div>
+            </article>
+
+            <!-- Price Range Filter -->
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
+                  <i class="icon-control fa fa-chevron-down"></i>
+                  <h6 class="title">Price range (₹)</h6>
+                </a>
+              </header>
+              <div class="filter-content collapse show" id="collapse_3">
+                <div class="card-body">
+                  <form method="get" action="{% url 'store' %}">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>Min</label>
+                        <select name="min_price" class="form-control">
+                          <option value="0">₹0</option>
+                          <option value="500">₹500</option>
+                          <option value="1000">₹1,000</option>
+                          <option value="2000">₹2,000</option>
+                          <option value="5000">₹5,000</option>
+                          <option value="10000">₹10,000</option>
+                          <option value="15000">₹15,000</option>
+                          <option value="20000">₹20,000</option>
+                          <option value="30000">₹30,000</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-6 text-right">
+                        <label>Max</label>
+                        <select name="max_price" class="form-control">
+                          <option value="1000">₹1,000</option>
+                          <option value="2000">₹2,000</option>
+                          <option value="5000">₹5,000</option>
+                          <option value="10000">₹10,000</option>
+                          <option value="15000">₹15,000</option>
+                          <option value="20000">₹20,000</option>
+                          <option value="30000">₹30,000</option>
+                          <option value="40000">₹40,000</option>
+                          <option value="50000">₹50,000+</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary mt-3 apply-btn">Apply</button>
+                  </form>
+                </div>
+              </div>
+            </article>
+          </div>
+        </aside>
+
+        <!-- Products Area -->
+        <main class="col-md-9">
+          {% if keyword %}
+            <!-- Display Search Result Keyword -->
+            <h3 class="mb-3" style="font-weight: 500; color: #333;">Search Results for "{{ keyword }}"</h3>
+            {% if products %}
+              <div class="row">
+                {% for product in products %}
+                  <div class="col-md-4 mb-4">
+                    <figure class="card card-product-grid shadow-sm border-0 rounded-4 hover-shadow" style="transition: 0.3s;">
+                      <div class="img-wrap text-center p-3 bg-light rounded-top-4">
+                        <a href="{% url 'product_detail' category_slug=product.category.slug product_slug=product.slug %}">
+                          <img src="{% if product.image1 %}{{ product.image1.url }}{% else %}https://via.placeholder.com/555x404.png?text=Product+Image{% endif %}" alt="{{ product.product_name }}" class="img-fluid" style="height: 200px; object-fit: contain;" />
+                        </a>
+                        <!-- Wishlist Button -->
+                        <button class="wishlist-btn {% if product.id in wishlist_product_ids %}active{% endif %}" data-product-id="{{ product.id }}">
+                          <i class="{% if product.id in wishlist_product_ids %}fas{% else %}far{% endif %} fa-heart"></i>
+                        </button>
+                      </div>
+                      <figcaption class="info-wrap p-3">
+                        <a href="{% url 'product_detail' category_slug=product.category.slug product_slug=product.slug %}" class="title fw-bold text-dark">{{ product.product_name|truncatechars:30 }}</a>
+                        <div class=""><span class="category-label">Category: </span><p class="category">{{ product.category }}</p></div>
+                        <div class="price-wrap mt-1">
+                          <span class="discounted-price">₹{{ product.price }}</span>
+                          {% if product.original_price > product.price %}
+                            <span class="mrp-price text-muted"><small>M.R.P.: </small><del>₹{{ product.original_price }}</del></span>
+                            <span class="discount-percentage text-success">{{ product.get_discount_percentage }}% off</span>
+                          {% else %}
+                            <span class="mrp-price text-muted"><small>M.R.P.: </small>₹{{ product.original_price }}</span>
+                          {% endif %}
+                          {% if product.is_same_day_delivery_eligible %}
+                            <div class="same-day-badge">
+                              <i class="fas fa-shipping-fast"></i> Same-Day Delivery
+                            </div>
+                          {% endif %}
+                        </div>
+                      </figcaption>
+                    </figure>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="alert alert-warning" role="alert">Sorry, no products found matching your search.</div>
+            {% endif %}
+          {% else %}
+            <div class="row">
+              {% for product in products %}
+                <div class="col-md-4 mb-4">
+                  <figure class="card card-product-grid shadow-sm border-0 rounded-4 hover-shadow" style="transition: 0.3s;">
+                    <div class="img-wrap text-center p-3 bg-light rounded-top-4">
+                      <a href="{% url 'product_detail' category_slug=product.category.slug product_slug=product.slug %}">
+                        <img src="{% if product.image1 %}{{ product.image1.url }}{% else %}https://via.placeholder.com/555x404.png?text=Product+Image{% endif %}" alt="{{ product.product_name }}" class="img-fluid" style="height: 200px; object-fit: contain;" />
+                      </a>
+                      <!-- Wishlist Button -->
+                      <button class="wishlist-btn icon-round {% if product.id in wishlist_product_ids %}active{% endif %}" data-product-id="{{ product.id }}">
+                        <i class="{% if product.id in wishlist_product_ids %}fas{% else %}far{% endif %} fa-heart"></i>
+                      </button>
+                    </div>
+                    <figcaption class="info-wrap p-3">
+                      <a href="{% url 'product_detail' category_slug=product.category.slug product_slug=product.slug %}" class="title fw-bold text-dark">{{ product.product_name|truncatechars:30 }}</a>
+                      <div class=""><span class="category-label">Category: </span><p class="category">{{ product.category }}</p></div>
+                      <div class="price-wrap mt-1">
+                        <span class="discounted-price">₹{{ product.price }}</span>
+                        {% if product.original_price > product.price %}
+                          <span class="mrp-price text-muted"><small>M.R.P.: </small><del>₹{{ product.original_price }}</del></span>
+                          <span class="discount-percentage text-success">{{ product.get_discount_percentage }}% off</span>
+                        {% else %}
+                          <span class="mrp-price text-muted"><small>M.R.P.: </small>₹{{ product.original_price }}</span>
+                        {% endif %}
+                        {% if product.is_same_day_delivery_eligible %}
+                          <div class="same-day-badge">
+                            <i class="fas fa-shipping-fast"></i> Same-Day Delivery
+                          </div>
+                        {% endif %}
+                      </div>
+                    </figcaption>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <!-- Pagination -->
+            <nav class="mt-4" aria-label="Page navigation">
+              <ul class="pagination">
+                {% if products.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?page={{ products.previous_page_number }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sizes %}{% for size in request.GET.sizes %}&sizes={{ size }}{% endfor %}{% endif %}">
+                      Previous
+                    </a>
+                  </li>
+                {% endif %}
+
+                {% for num in products.paginator.page_range %}
+                  <li class="page-item {% if products.number == num %}active{% endif %}">
+                    <a class="page-link"
+                      href="?page={{ num }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sizes %}{% for size in request.GET.sizes %}&sizes={{ size }}{% endfor %}{% endif %}">
+                      {{ num }}
+                    </a>
+                  </li>
+                {% endfor %}
+
+                {% if products.has_next %}
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?page={{ products.next_page_number }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sizes %}{% for size in request.GET.sizes %}&sizes={{ size }}{% endfor %}{% endif %}">
+                      Next
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+          </main>
+        </div>
+      </div>
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock %}

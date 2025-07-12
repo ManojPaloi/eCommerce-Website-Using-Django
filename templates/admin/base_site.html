@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}My E-Commerce Admin{% endblock %}
+
+{% block branding %}
+<style>
+  /* Branding header styling for an official look */
+  #site-name {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: #1a2a44; /* Dark navy for professionalism */
+    margin: 0;
+    padding: 0.75rem 0;
+    line-height: 1.2;
+  }
+  #site-name a.logo {
+    color: #1a2a44; /* Consistent dark navy for text */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  #site-name a.logo:hover,
+  #site-name a.logo:focus {
+    color: #1d4ed8; /* Deeper vibrant blue for hover/focus */
+  }
+</style>
+
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}" class="logo" tabindex="0">My E-Commerce Admin</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+{# Intentionally empty for a clean, minimal navigation #}
+{% endblock %}

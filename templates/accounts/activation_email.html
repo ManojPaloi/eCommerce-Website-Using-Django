@@ -1,0 +1,151 @@
+{% load static %}
+{% autoescape off %}
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Activate Your Findus Account</title>
+      <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: #f5f5f5;
+          font-family: 'Segoe UI', 'Roboto', sans-serif;
+          color: #2c3e50;
+          -webkit-font-smoothing: antialiased;
+          min-height: 100vh;
+        }
+        .container {
+          max-width: 650px;
+          margin: 40px auto;
+          background: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+          padding: 40px;
+          text-align: center;
+          border-top: 5px solid #003087;
+          box-sizing: border-box;
+        }
+        .brand-wrap {
+          display: inline-block;
+          text-decoration: none;
+          margin-bottom: 20px;
+        }
+        .logo {
+          max-width: 180px;
+          width: 100%;
+          height: auto;
+        }
+        h1 {
+          font-size: 30px;
+          font-weight: 700;
+          color: #003087;
+          margin: 0 0 20px;
+          line-height: 1.2;
+        }
+        p {
+          font-size: 16px;
+          line-height: 1.6;
+          color: #34495e;
+          margin: 0 0 20px;
+        }
+        .button {
+          display: inline-block;
+          padding: 14px 28px;
+          background: linear-gradient(90deg, #003087, #0056b3);
+          color: #ffffff !important;
+          text-decoration: none;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 48, 135, 0.3);
+          margin: 20px 0;
+        }
+        .button:hover {
+          background: linear-gradient(90deg, #002766, #003e8a);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(0, 48, 135, 0.4);
+        }
+        .footer {
+          margin-top: 30px;
+          font-size: 13px;
+          color: #7f8c8d;
+          border-top: 1px solid #dfe6e9;
+          padding-top: 15px;
+        }
+        .footer a {
+          color: #003087;
+          text-decoration: none;
+          font-weight: 500;
+        }
+        .footer a:hover {
+          text-decoration: underline;
+        }
+        @media only screen and (max-width: 600px) {
+          .container {
+            padding: 25px;
+            margin: 20px 10px;
+          }
+          .logo {
+            max-width: 140px;
+          }
+          h1 {
+            font-size: 24px;
+          }
+          p {
+            font-size: 15px;
+          }
+          .button {
+            padding: 12px 20px;
+            font-size: 15px;
+          }
+          .footer {
+            font-size: 12px;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="brand-wrap"><img class="logo" src="https://images.seeklogo.com/logo-png/33/2/findus-logo-png_seeklogo-331490.png" alt="Findus Logo" /></a>
+
+        <!-- Title -->
+        <h1>Welcome to Findus!</h1>
+
+        <!-- Greeting -->
+        <p>
+          Hello <strong>{{ user.first_name|default:user.username }}</strong>,
+        </p>
+
+        <!-- Message -->
+        <p>
+          Thanks for registering on <strong>Findus</strong> – your trusted online shopping partner. To complete your registration and start exploring exclusive deals, please confirm your email address by clicking the button below.
+        </p>
+
+        <!-- CTA Button -->
+        <a href="{{ activation_url }}" class="button" target="_blank" rel="noopener noreferrer">Activate Your Account</a>
+
+        <!-- Fallback Link -->
+        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+        <p style="word-break: break-word;">
+          <a href="{{ activation_url }}" style="color: #003087;">{{ activation_url }}</a>
+        </p>
+
+        <p>
+          If you didn't create this account, no action is required. You can safely ignore this email or <a href="mailto:support@manojpaloi.com">contact our support</a>.
+        </p>
+
+        <!-- Footer -->
+        <div class="footer">
+          &copy; 2025 Findus. All rights reserved. Designed by <strong>Manoj Paloi</strong>.<br />
+          Need help? <a href="mailto:support@manojpaloi.com">Contact Support</a> |
+          <a href="https://manojpaloi.com/terms">Terms</a> |
+          <a href="https://manojpaloi.com/privacy">Privacy</a>
+        </div>
+      </div>
+    </body>
+  </html>
+{% endautoescape %}

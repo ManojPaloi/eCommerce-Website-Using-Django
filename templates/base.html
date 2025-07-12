@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="public, max-age=604800" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>Findus | Your Ultimate Online Shopping Destination</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Shop at Findus, your ultimate online destination for electronics, fashion, and more. Discover unbeatable deals today!" />
+    <meta name="keywords" content="online shopping, Findus, electronics, fashion, deals, e-commerce" />
+    <meta name="author" content="Findus Team" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Findus | Your Ultimate Online Shopping Destination" />
+    <meta property="og:description" content="Shop at Findus, your ultimate online destination for electronics, fashion, and more. Discover unbeatable deals today!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.findus.com" />
+    <meta property="og:image" content="{% static 'images/findus-og-image.jpg' %}" />
+    <meta property="og:site_name" content="Findus" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Findus | Your Ultimate Online Shopping Destination" />
+    <meta name="twitter:description" content="Shop at Findus, your ultimate online destination for electronics, fashion, and more. Discover unbeatable deals today!" />
+    <meta name="twitter:image" content="{% static 'images/findus-og-image.jpg' %}" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}" />
+
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <!-- Optional Bootstrap Theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap-theme.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/all.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/ui.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" media="only screen and (max-width: 1200px)" />
+
+    <!-- Inline CSS for Modern Loading Animation with Shopping Cart SVG -->
+    <style>
+      /* Loading Overlay */
+      .loading-overlay {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(245, 247, 250, 0.8);
+        display: flex;
+        opacity: 1;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        backdrop-filter: blur(8px);
+        transition: opacity 0.5s ease-in-out;
+      }
+      
+      /* Spinner Container */
+      .loading-spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Preloader Cart Animation */
+      .preloader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .cart {
+        width: 100px;
+        height: 100px;
+        color: #007bff;
+      }
+      
+      .cart__top {
+        animation: cartTop 1.5s linear infinite;
+      }
+      
+      .cart__wheel1 .cart__wheel-stroke {
+        animation: wheel 1.5s linear infinite;
+      }
+      
+      .cart__wheel2 .cart__wheel-stroke {
+        animation: wheel 1.5s linear infinite;
+      }
+      
+      @keyframes cartTop {
+        0% {
+          stroke-dashoffset: -338;
+        }
+        50% {
+          stroke-dashoffset: 0;
+        }
+        100% {
+          stroke-dashoffset: 338;
+        }
+      }
+      
+      @keyframes wheel {
+        0% {
+          stroke-dashoffset: 81.68;
+        }
+        50% {
+          stroke-dashoffset: 0;
+        }
+        100% {
+          stroke-dashoffset: -81.68;
+        }
+      }
+      
+      /* Brand Name Animation */
+      .loading-spinner .brand-name {
+        margin-top: 20px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #007bff;
+        letter-spacing: 1.2px;
+        animation: fadeIn 1s ease-in-out forwards;
+      }
+      
+      /* Fade-in Animation for Brand Name */
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      /* Hover Effects for Links, Buttons, and Dropdown Items */
+      a:not(.dropdown-item):hover,
+      .btn:hover,
+      .nav-link:hover {
+        transform: scale(1.05);
+        transition: transform 0.2s ease, color 0.2s ease;
+        color: #0056b3;
+      }
+      
+      .dropdown-item:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+        color: #007bff;
+        transform: translateX(4px);
+        transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
+      }
+      
+      /* Icon Hover Animation */
+      a i:hover,
+      .btn i:hover,
+      .dropdown-item i:hover {
+        transform: scale(1.15);
+        transition: transform 0.2s ease;
+      }
+      
+      /* Specific Hover for Login/Sign Up */
+      .dropdown-item.login-btn:hover,
+      .dropdown-item.signup-btn:hover {
+        background-color: rgba(0, 123, 255, 0.15);
+        color: #0056b3;
+      }
+      
+      /* Prevent hover effects on disabled buttons */
+      .btn.disabled:hover {
+        transform: none;
+        color: inherit;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'base/header.html' %}
+
+    {% block content %}
+
+    {% endblock %}
+
+    {% include 'base/footer.html' %}
+
+    <!-- Modern Loading Animation HTML with Shopping Cart SVG -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner">
+        <div class="preloader">
+          <svg class="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128" width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+              <g class="cart__track" stroke="hsla(0,10%,10%,0.1)">
+                <polyline points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" />
+                <circle cx="43" cy="111" r="13" />
+                <circle cx="102" cy="111" r="13" />
+              </g>
+              <g class="cart__lines" stroke="currentColor">
+                <polyline class="cart__top" points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" stroke-dasharray="338 338" stroke-dashoffset="-338" />
+                <g class="cart__wheel1" transform="rotate(-90,43,111)">
+                  <circle class="cart__wheel-stroke" cx="43" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
+                </g>
+                <g class="cart__wheel2" transform="rotate(90,102,111)">
+                  <circle class="cart__wheel-stroke" cx="102" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-name">Findus</div>
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Inline JavaScript for Loading Animation -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const loadingOverlay = document.getElementById('loadingOverlay')
+      
+        // Show loading animation on every page refresh
+        console.log('Loading animation shown on page refresh at ' + new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
+        loadingOverlay.style.display = 'flex'
+        setTimeout(() => {
+          loadingOverlay.style.opacity = '1'
+        }, 10)
+      
+        // Hide after animation completes (3 seconds)
+        setTimeout(() => {
+          console.log('Hiding loading animation after refresh at ' + new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
+          loadingOverlay.style.opacity = '0'
+          setTimeout(() => {
+            loadingOverlay.style.display = 'none'
+          }, 500)
+        }, 3000) // 3-second animation duration
+      
+        // Hide loading overlay if page load fails or takes too long (fallback)
+        window.addEventListener('load', function () {
+          console.log('Page fully loaded, hiding loading animation if visible at ' + new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
+          if (loadingOverlay.style.display !== 'none') {
+            loadingOverlay.style.opacity = '0'
+            setTimeout(() => {
+              loadingOverlay.style.display = 'none'
+            }, 500)
+          }
+        })
+      })
+    </script>
+  </body>
+</html>

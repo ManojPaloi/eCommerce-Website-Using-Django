@@ -1,0 +1,243 @@
+{% load static %}
+<!-- ========================= FOOTER ========================= -->
+<footer class="section-footer text-white">
+  <div class="container py-5">
+    <div class="row">
+      <!-- Company Info -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="footer-title text-uppercase fw-bold text-light mb-3">Company</h6>
+        <ul class="list-unstyled">
+          <li>
+            <a href="{% url 'about_us' %}" class="footer-link">About Us</a>
+          </li>
+          <li>
+            <a href="{% url 'about_us' %}" class="footer-link">Careers</a>
+          </li>
+          <li>
+            <a href="{% url 'about_us' %}" class="footer-link">Press & Media</a>
+          </li>
+          <li>
+            <a href="{% url 'about_us' %}" class="footer-link">Affiliate Program</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Customer Support -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="footer-title text-uppercase fw-bold text-light mb-3">Customer Support</h6>
+        <ul class="list-unstyled">
+          <li>
+            <a href="{% url 'customer_support' %}" class="footer-link">Help Center</a>
+          </li>
+          <li>
+            <a href="{% url 'customer_support' %}" class="footer-link">Return Policy</a>
+          </li>
+          <li>
+            <a href="{% url 'my_orders' %}" class="footer-link">Shipping & Delivery</a>
+          </li>
+          <li>
+            <a href="{% url 'contact_us' %}" class="footer-link">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Stay Connected -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="footer-title text-uppercase fw-bold text-light mb-3">Stay Connected</h6>
+        <div class="d-flex mb-3 social-icons">
+          <a href="https://www.facebook.com/paloimanoj _blank" class="footer-icon" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://x.com/PaloiManoj _blank" class="footer-icon" aria-label="Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.instagram.com/__m_a_n_o_j__p_a_l_o_i__/ _blank" class="footer-icon" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/manoj-paloi/ _blank" class="footer-icon" aria-label="LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <span class="footer-text d-block mb-2">Download Our App</span>
+        <div class="d-flex flex-wrap align-items-center app-badges">
+          <a href="https://play.google.com" target="_blank">
+            <div class="app-badge-wrapper">
+              <i class="fab fa-google-play app-badge-icon"></i>
+            </div>
+          </a>
+          <a href="https://apps.apple.com" target="_blank">
+            <div class="app-badge-wrapper">
+              <i class="fab fa-apple app-badge-icon"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="footer-title text-uppercase fw-bold text-light mb-3">Contact Us</h6>
+        <p class="footer-text mb-1">
+          <i class="fas fa-envelope me-2"></i> paloimanoj@gmail.com
+        </p>
+        <p class="footer-text mb-1">
+          <i class="fas fa-phone me-2"></i> +91-9547184274
+        </p>
+        <p class="footer-text">
+          <i class="fas fa-map-marker-alt me-2"></i> 721517 JHARGRAM, KOLKATA, West Bengal, INDIA
+        </p>
+      </div>
+    </div>
+
+    <hr class="border-light my-4" />
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center footer-text pt-3">
+      <p class="mb-2 mb-md-0">
+        © 2025 <strong class="text-white">Findus</strong>. All rights reserved. Designed by <strong class="text-white">Manoj Paloi</strong>
+      </p>
+      <div class="payment-icons">
+        <i class="fab fa-cc-visa fa-lg footer-icon"></i>
+        <i class="fab fa-cc-mastercard fa-lg footer-icon"></i>
+        <i class="fab fa-cc-amex fa-lg footer-icon"></i>
+        <i class="fab fa-cc-paypal fa-lg footer-icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" title="Go to top" aria-label="Scroll to top">⇧</button>
+
+  <style>
+    .section-footer {
+      background: linear-gradient(180deg, #0a2540 0%, #0d2e52 100%);
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .footer-title {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-link {
+      color: #d1d1d1;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-link:hover {
+      color: #ffd700;
+    }
+    
+    .footer-text {
+      color: #d1d1d1;
+      font-size: 0.9rem;
+    }
+    
+    .footer-icon {
+      color: #d1d1d1;
+      margin-right: 15px; /* Increased spacing for larger icons */
+      font-size: 20px; /* Larger size for social media icons */
+      transition: color 0.3s ease;
+    }
+    
+    .footer-icon:hover {
+      color: #ffd700;
+    }
+    
+    .social-icons,
+    .payment-icons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .app-badge-wrapper {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ffd700;
+      border-radius: 4px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    
+    .app-badge-wrapper:hover {
+      transform: scale(1.05);
+      border-color: #fff;
+    }
+    
+    .app-badge-icon {
+      font-size: 24px;
+      color: #d1d1d1;
+      transition: color 0.3s ease;
+    }
+    
+    .app-badge-icon:hover {
+      color: #ffd700;
+    }
+    
+    hr.border-light {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    #scrollTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      z-index: 99;
+      background-color: #ffd700;
+      color: #1a1a1a;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    
+    #scrollTopBtn:hover {
+      background-color: #e6c200;
+      transform: scale(1.1);
+    }
+    
+    @media (max-width: 767.98px) {
+      .col-lg-3 {
+        max-width: 100%;
+        text-align: center;
+      }
+    
+      .app-badges,
+      .social-icons,
+      .payment-icons {
+        justify-content: center;
+      }
+    
+      .d-flex.flex-md-row {
+        flex-direction: column !important;
+        text-align: center;
+      }
+    
+      #scrollTopBtn {
+        bottom: 20px;
+        right: 20px;
+        font-size: 20px;
+      }
+    }
+  </style>
+
+  <script>
+    window.onscroll = function () {
+      let btn = document.getElementById('scrollTopBtn')
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        btn.style.display = 'block'
+      } else {
+        btn.style.display = 'none'
+      }
+    }
+    
+    document.getElementById('scrollTopBtn').addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+  </script>
+</footer>
+<!-- ========================= FOOTER END ========================= -->

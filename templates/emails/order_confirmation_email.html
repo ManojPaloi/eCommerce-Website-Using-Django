@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Order Confirmation - Invoice #{{ order.id }}</title>
+
+    <style>
+      /* Reset & base */
+      body,
+      table,
+      td,
+      a {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background: #f9fafb;
+        color: #1f2937;
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      table {
+        border-collapse: collapse !important;
+      }
+      a {
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      a:hover,
+      a:focus {
+        color: #2563eb;
+        text-decoration: underline;
+      }
+      img {
+        border: 0;
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Container */
+      .email-container {
+        max-width: 700px;
+        margin: 30px auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        padding: 48px 56px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+      }
+      
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 24px;
+        margin-bottom: 36px;
+      }
+      .header img {
+        height: 64px;
+        border-radius: 10px;
+        object-fit: contain;
+      }
+      .company-details {
+        text-align: right;
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.5;
+        max-width: 280px;
+      }
+      .company-details strong {
+        font-size: 18px;
+        color: #111827;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 6px;
+      }
+      .company-details a {
+        color: #3b82f6;
+        word-break: break-word;
+      }
+      
+      /* Title */
+      h2 {
+        text-align: center;
+        font-weight: 900;
+        font-size: 34px;
+        color: #111827;
+        margin: 0 0 12px;
+        letter-spacing: -0.5px;
+        user-select: none;
+      }
+      .title-divider {
+        width: 90px;
+        height: 6px;
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+        border-radius: 4px;
+        margin: 0 auto 40px;
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+      }
+      
+      /* Thank You */
+      .thank-you {
+        background: #eff6ff;
+        border-radius: 14px;
+        border: 1.5px solid #3b82f6;
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+        padding: 28px 36px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e40af;
+        margin-bottom: 48px;
+        user-select: none;
+      }
+      
+      /* Order Status */
+      .order-status {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 32px 36px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+        margin-bottom: 56px;
+        text-align: center;
+      }
+      .order-status p {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 28px;
+        letter-spacing: 0.05em;
+      }
+      .progress-bar {
+        position: relative;
+        background: #e0e7ff;
+        border-radius: 24px;
+        height: 16px;
+        width: 90%;
+        margin: 0 auto 20px;
+        overflow: hidden;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+      }
+      .progress-bar-fill {
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+        height: 100%;
+        border-radius: 24px 0 0 24px;
+        transition: width 0.7s ease-in-out;
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        width: 0%;
+      }
+      /* Progress widths for different statuses */
+      .status-pending .progress-bar-fill {
+        width: 25%;
+      }
+      .status-confirmed .progress-bar-fill {
+        width: 50%;
+      }
+      .status-processing .progress-bar-fill {
+        width: 75%;
+      }
+      .status-shipped .progress-bar-fill {
+        width: 90%;
+      }
+      .status-delivered .progress-bar-fill {
+        width: 100%;
+        border-radius: 24px;
+      }
+      
+      .progress-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        margin: 0 auto;
+        font-size: 14px;
+        font-weight: 700;
+        color: #6b7280;
+        letter-spacing: 0.05em;
+        user-select: none;
+      }
+      .progress-labels span.active {
+        color: #2563eb;
+        text-shadow: 0 0 4px rgba(37, 99, 235, 0.7);
+      }
+      
+      /* Details Table */
+      .details-table {
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        font-size: 15px;
+        color: #4b5563;
+        margin-bottom: 56px;
+        overflow: hidden;
+      }
+      .details-table td {
+        padding: 18px 24px;
+        vertical-align: top;
+        background: #fff;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .details-table tr:last-child td {
+        border-bottom: none;
+      }
+      .details-table td strong {
+        color: #111827;
+        font-weight: 700;
+      }
+      .details-table tr:nth-child(even) td {
+        background: #f9fafb;
+      }
+      
+      /* Items Table */
+      .items-table {
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        font-size: 15px;
+        color: #374151;
+        margin-bottom: 56px;
+        overflow: hidden;
+      }
+      .items-table th,
+      .items-table td {
+        padding: 16px 22px;
+        border-bottom: 1px solid #e5e7eb;
+        vertical-align: middle;
+      }
+      .items-table th {
+        background: #f3f4f6;
+        font-weight: 700;
+        color: #111827;
+        text-align: left;
+        letter-spacing: 0.04em;
+      }
+      .items-table td {
+        font-weight: 500;
+      }
+      .items-table img.product-image {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-right: 16px;
+        border: 1px solid #e5e7eb;
+        vertical-align: middle;
+        transition: transform 0.3s ease;
+      }
+      .items-table img.product-image:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+      }
+      
+      /* Totals Table */
+      .totals-table {
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+        font-size: 17px;
+        color: #4b5563;
+        margin-bottom: 64px;
+      }
+      .totals-table td {
+        padding: 18px 24px;
+      }
+      .totals-table td:last-child {
+        text-align: right;
+        font-weight: 700;
+        color: #111827;
+      }
+      .totals-table .total-row td {
+        font-size: 20px;
+        font-weight: 900;
+        color: #2563eb;
+        letter-spacing: 0.05em;
+      }
+      
+      /* Button for View Order Online */
+      .btn-view-order {
+        display: inline-block;
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+        color: #fff !important;
+        font-weight: 700;
+        padding: 14px 36px;
+        border-radius: 32px;
+        text-align: center;
+        font-size: 16px;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        transition: background 0.4s ease, box-shadow 0.4s ease;
+        user-select: none;
+        margin: 0 auto 48px;
+        display: block;
+        max-width: 240px;
+      }
+      .btn-view-order:hover,
+      .btn-view-order:focus {
+        background: linear-gradient(90deg, #2563eb, #1e40af);
+        box-shadow: 0 10px 28px rgba(37, 99, 235, 0.6);
+      }
+      
+      /* QR Code Section */
+      .qr-code {
+        text-align: center;
+        background: #eff6ff;
+        padding: 32px 36px;
+        border-radius: 18px;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        border: 1.5px solid #3b82f6;
+        margin-bottom: 56px;
+      }
+      .qr-code img {
+        max-width: 150px;
+        border-radius: 16px;
+        padding: 14px;
+        background: #fff;
+        border: 3px solid #3b82f6;
+        margin-bottom: 20px;
+        user-select: none;
+        transition: box-shadow 0.3s ease;
+      }
+      .qr-code img:hover,
+      .qr-code img:focus {
+        box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
+      }
+      .qr-code p {
+        font-size: 15px;
+        color: #2563eb;
+        font-weight: 700;
+        margin: 0 0 8px;
+        user-select: none;
+      }
+      .qr-code a {
+        font-weight: 600;
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      .qr-code a:hover,
+      .qr-code a:focus {
+        color: #1e40af;
+        text-decoration: underline;
+      }
+      
+      /* Social Links */
+      .social-links {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .social-links a {
+        display: inline-block;
+        margin: 0 16px;
+        border-radius: 50%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .social-links a:hover,
+      .social-links a:focus {
+        transform: scale(1.2);
+        box-shadow: 0 0 12px rgba(59, 130, 246, 0.7);
+        outline: none;
+      }
+      .social-links img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.1));
+        transition: filter 0.3s ease;
+        user-select: none;
+      }
+      .social-links a:hover img,
+      .social-links a:focus img {
+        filter: drop-shadow(0 0 5px #3b82f6);
+      }
+      
+      /* Footer */
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #6b7280;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 32px;
+        margin-top: 56px;
+        background: #f9fafb;
+        border-radius: 0 0 16px 16px;
+        font-weight: 500;
+        user-select: none;
+        line-height: 1.5;
+      }
+      .footer a {
+        color: #3b82f6;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 3px 7px;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+      }
+      .footer a:hover,
+      .footer a:focus {
+        background-color: #2563eb;
+        color: #fff;
+        outline: none;
+      }
+      
+      /* Responsive */
+      @media only screen and (max-width: 600px) {
+        .email-container {
+          margin: 20px 12px;
+          padding: 32px 24px;
+        }
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding-bottom: 18px;
+          margin-bottom: 32px;
+        }
+        .company-details {
+          text-align: left;
+          max-width: 100%;
+          margin-top: 14px;
+          font-size: 13px;
+        }
+        .items-table th,
+        .items-table td {
+          padding: 12px 14px;
+          font-size: 14px;
+        }
+        .items-table img.product-image {
+          width: 44px;
+          height: 44px;
+          margin-right: 10px;
+        }
+        .progress-bar,
+        .progress-labels {
+          width: 100%;
+        }
+        h2 {
+          font-size: 26px;
+        }
+        .qr-code {
+          padding: 24px 20px;
+        }
+        .qr-code img {
+          max-width: 120px;
+          padding: 10px;
+        }
+        .social-links img {
+          width: 28px;
+          height: 28px;
+        }
+        .btn-view-order {
+          padding: 14px 28px;
+          max-width: 100%;
+        }
+        .details-table td {
+          padding: 14px 16px;
+        }
+        .totals-table td {
+          padding: 14px 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container" role="main" aria-label="Order Confirmation Email">
+      <!-- Header -->
+      <header class="header">
+        <img src="https://images.seeklogo.com/logo-png/33/2/findus-logo-png_seeklogo-331490.png" alt="Findus Logo" />
+        <div class="company-details">
+          <strong>Findus Pvt. Ltd.</strong><br />
+          GST No: 27AABCU9603R1ZV<br />
+          Email: <a href="mailto:paloimanoj@gmail.com">paloimanoj@gmail.com</a><br />
+          Phone: <a href="tel:+919547184274">+91-9547184274</a>
+        </div>
+      </header>
+
+      <!-- Title -->
+      <h2>Order Confirmation &amp; Invoice</h2>
+      <div class="title-divider" aria-hidden="true"></div>
+
+      <!-- Thank You -->
+      <section class="thank-you" aria-live="polite" aria-atomic="true">
+        Thank you for your order, <strong>{{ order.first_name }}</strong>! We're preparing your items with care.
+      </section>
+
+      <!-- Order Status -->
+      <section class="order-status status-confirmed" aria-label="Order status progress" role="region">
+        <p>
+          Order Status: <strong>Confirmed</strong>
+        </p>
+        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
+          <div class="progress-bar-fill"></div>
+        </div>
+        <div class="progress-labels" aria-hidden="true">
+          <span class="active">Confirmed</span>
+          <span>Processing</span>
+          <span>Shipped</span>
+          <span>Delivered</span>
+        </div>
+      </section>
+
+      <!-- Order & Customer Details -->
+      <table class="details-table" role="table" aria-label="Customer and order details">
+        <tbody>
+          <tr>
+            <td>
+              <strong>Invoice No:</strong>
+            </td>
+            <td>#{{ order.id }}</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Date:</strong>
+            </td>
+            <td>{{ order.created_at|date:'F j, Y, g:i A' }}</td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <strong>Billed To:</strong><br />
+              {{ order.first_name }} {{ order.last_name }}<br />
+              <a href="mailto:{{ order.email }}">{{ order.email }}</a><br />
+              {{ order.country_code }} {{ order.phone }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <strong>Shipping Address:</strong><br />
+              {{ order.house }}, {{ order.building }}, {{ order.street }}<br />
+              {{ order.city }}, {{ order.state }} - {{ order.postal_code }}<br />
+              {{ order.country }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Items Table -->
+      <table class="items-table" role="table" aria-label="Ordered items">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Color</th>
+            <th scope="col">Size</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+            <tr>
+              <td>
+                {% if item.product_image %}
+                  <img src="{{ item.product_image }}" alt="{{ item.product_name }}" class="product-image" />
+                {% endif %}
+                {{ item.product_name }}
+              </td>
+              <td>{{ item.color|default:'-' }}</td>
+              <td>{{ item.size|default:'-' }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>₹{{ item.price }}</td>
+              <td>₹{{ item.total_price }}</td>
+            </tr>
+          {% endfor %}
+          {% if empty %}
+            <tr>
+              <td colspan="6" style="text-align:center; color:#6b7280;">No items in this order.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+      <!-- Totals -->
+      <table class="totals-table" role="table" aria-label="Order totals">
+        <tbody>
+          <tr>
+            <td>Subtotal:</td>
+            <td>₹{{ order.subtotal }}</td>
+          </tr>
+          <tr>
+            <td>Tax (18%):</td>
+            <td>₹{{ order.tax }}</td>
+          </tr>
+          <tr>
+            <td>Delivery Charges:</td>
+            <td>₹{{ order.delivery_charge }}</td>
+          </tr>
+          <tr>
+            <td>Discount:</td>
+            <td>- ₹{{ order.discount }}</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total Amount:</td>
+            <td>₹{{ order.total }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- QR Code -->
+      {% if qr_code %}
+        <section class="qr-code" aria-label="QR code for order details">
+          <p>Scan to View Order Details</p>
+          <img src="data:image/png;base64,{{ qr_code }}" alt="Order QR Code" />
+          <p>
+            Or <a href="https://findus.com/order/{{ order.id }}" target="_blank" rel="noopener noreferrer">click here</a> to view online
+          </p>
+        </section>
+      {% endif %}
+
+      <!-- Social Links -->
+      <nav class="social-links" aria-label="Find us on social media">
+        <a href="https://facebook.com/findus" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="https://img.icons8.com/color/48/000000/facebook-new.png" alt="Facebook" /></a>
+        <a href="https://twitter.com/findus" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><img src="https://img.icons8.com/color/48/000000/twitter--v1.png" alt="Twitter" /></a>
+        <a href="https://instagram.com/findus" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="https://img.icons8.com/color/48/000000/instagram-new.png" alt="Instagram" /></a>
+      </nav>
+
+      <!-- Footer -->
+      <footer class="footer" role="contentinfo">
+        © 2025 Findus Pvt. Ltd. All rights reserved.<br />
+        Designed by <a href="https://yourportfolio.com" target="_blank" rel="noopener noreferrer">Manoj Paloi</a><br />
+        <a href="https://findus.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> |
+        <a href="https://findus.com/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> |
+        <a href="https://findus.com/contact" target="_blank" rel="noopener noreferrer">Contact Us</a>
+      </footer>
+    </div>
+  </body>
+</html>

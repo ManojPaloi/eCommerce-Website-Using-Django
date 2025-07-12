@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f0f4f8;
+    }
+    
+    .confirmation-wrapper {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    /* 🎉 Success Box */
+    .success-box {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      text-align: center;
+      padding: 50px 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .success-box svg {
+      width: 100px;
+      height: 100px;
+      fill: none;
+    }
+    
+    .success-circle {
+      fill: #10b981;
+    }
+    
+    .success-check {
+      stroke: #fff;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 0;
+      animation: loopCheck 1.5s linear infinite;
+    }
+    
+    @keyframes loopCheck {
+      0% {
+        stroke-dashoffset: 48;
+      }
+      50% {
+        stroke-dashoffset: 0;
+      }
+      100% {
+        stroke-dashoffset: 48;
+      }
+    }
+    
+    .happy-banner {
+      margin-top: 20px;
+      font-family: 'Merriweather', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2563eb;
+      animation: bounceIn 1s ease;
+    }
+    
+    @keyframes bounceIn {
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-15px);
+      }
+      60% {
+        transform: translateY(-7px);
+      }
+    }
+    
+    .action-buttons {
+      margin-top: 30px;
+    }
+    
+    .action-buttons a,
+    .action-buttons button {
+      display: inline-block;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+      background: #2563eb;
+      border: none;
+      border-radius: 30px;
+      margin: 10px 8px;
+      text-decoration: none;
+      transition: transform 0.3s, background 0.3s;
+    }
+    
+    .action-buttons .btn-download {
+      background: #475569;
+    }
+    
+    .action-buttons a:hover,
+    .action-buttons button:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+    
+    /* Invoice Styling */
+    .invoice-box {
+      background: white;
+      padding: 50px;
+      margin-top: 40px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+    }
+    
+    .invoice-box h4 {
+      font-size: 1.2rem;
+      color: #1f2937;
+      font-weight: 600;
+    }
+    
+    .invoice-box .section-title {
+      font-weight: 600;
+      border-bottom: 2px solid #2563eb;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      font-family: 'Merriweather', serif;
+      color: #1e293b;
+    }
+    
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+    }
+    
+    .invoice-table th,
+    .invoice-table td {
+      padding: 14px;
+      border: 1px solid #e5e7eb;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    .invoice-footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .qr-section {
+      text-align: center;
+      margin-top: 35px;
+    }
+    
+    .qr-section img {
+      max-width: 150px;
+      border: 1px solid #e2e8f0;
+      padding: 8px;
+      border-radius: 8px;
+    }
+    
+    @media print {
+      nav,
+      header,
+      footer,
+      .success-box,
+      .action-buttons,
+      .happy-banner {
+        display: none !important;
+      }
+      .invoice-box {
+        box-shadow: none;
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: white !important;
+      }
+    }
+    .hover-white:hover {
+      color: white !important;
+    }
+  </style>
+
+  <div class="confirmation-wrapper">
+    <!-- ✅ Animated Tick + Banner -->
+    <div class="success-box">
+      <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+        <circle class="success-circle" cx="26" cy="26" r="25" />
+        <path class="success-check" d="M14 27l8 8 16-16" />
+      </svg>
+      <h2>Your Order Has Been Placed Successfully!</h2>
+      <div class="happy-banner">🎉 Happy Shopping! Thank You for Choosing Findus 🎉</div>
+      <div class="action-buttons">
+        <a href="{% url 'store' %}" class="hover-white"><i class="fas fa-store me-1"></i> Continue Shopping</a>
+
+        <button onclick="window.print()" class="btn-download"><i class="fas fa-download me-1"></i> Download Invoice</button>
+      </div>
+    </div>
+
+    <!-- 🧾 Invoice Details -->
+    <div class="invoice-box">
+      <div class="d-flex justify-content-between align-items-center">
+        <img src="{% static 'images/logo.jpg.png.png' %}" alt="Logo" style="max-height: 60px;" />
+        <div>
+          <h4>Invoice #{{ order.id }}</h4>
+          <p>
+            <strong>Order Date:</strong> {{ order.created_at|date:'F j, Y, g:i A' }}
+          </p>
+          <p>
+            <strong>Status:</strong> {{ order.order_status|title }}
+          </p>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <div class="section-title">Billing Details</div>
+          <p>
+            <strong>Name:</strong> {{ order.first_name }} {{ order.last_name }}<br />
+            <strong>Email:</strong> {{ order.email }}<br />
+            <strong>Phone:</strong> {{ order.country_code }}{{ order.phone }}<br />
+            <strong>Address:</strong><br />
+            {{ order.street }}<br />
+            {{ order.building }} {{ order.house }}<br />
+            {{ order.city }}, {{ order.state }}<br />
+            {{ order.postal_code }} {{ order.zip_code }}<br />
+            {{ order.country }}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <div class="section-title">Shipping Details</div>
+          <p>
+            {% if order.shipping_first_name %}
+              <strong>Name:</strong> {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br />
+              <strong>Email:</strong> {{ order.shipping_email }}<br />
+              <strong>Phone:</strong> {{ order.shipping_country_code }}{{ order.shipping_phone }}<br />
+              <strong>Address:</strong><br />
+              {{ order.shipping_street }}<br />
+              {{ order.shipping_building }} {{ order.shipping_house }}<br />
+              {{ order.shipping_city }}, {{ order.shipping_state }}<br />
+              {{ order.shipping_postal_code }} {{ order.shipping_zip_code }}<br />
+              {{ order.shipping_country }}
+            {% else %}
+              <em>Same as billing address.</em>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="section-title">Payment Info</div>
+          <p>
+            <strong>Method:</strong> {{ order.payment_method|title }}<br />
+            <strong>Status:</strong> {{ order.payment_status|title }}<br />
+            <strong>Paid Online:</strong> {{ order.is_paid_online|yesno:'Yes,No' }}<br />
+            {% if order.razorpay_payment_id %}
+              <strong>Transaction ID:</strong> {{ order.razorpay_payment_id }}<br />
+            {% endif %}
+            {% if order.coupon_code %}
+              <strong>Coupon:</strong> {{ order.coupon_code }}
+            {% endif %}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <div class="section-title">Delivery Info</div>
+          <p>
+            <strong>Slot:</strong> {{ order.get_delivery_slot_display }}<br />
+            <strong>Express Delivery:</strong> {{ order.express_delivery|yesno:'Yes,No' }}<br />
+            <strong>Expected:</strong> {{ order.expected_delivery_date|date:'F j, Y' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="table-responsive mt-5">
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Color</th>
+              <th>Size</th>
+              <th>Unit Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order_items %}
+              <tr>
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.color|default:'-' }}</td>
+                <td>{{ item.size|default:'-' }}</td>
+                <td>₹{{ item.price|floatformat:2 }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹{{ item.total_price|floatformat:2 }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6">No items found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="5" class="text-end">Subtotal</th>
+              <th>₹{{ subtotal|floatformat:2 }}</th>
+            </tr>
+            <tr>
+              <th colspan="5" class="text-end">Tax (18%)</th>
+              <th>₹{{ order.tax|floatformat:2 }}</th>
+            </tr>
+            <tr>
+              <th colspan="5" class="text-end">Delivery Charge</th>
+              <th>₹{{ order.delivery_charge|floatformat:2 }}</th>
+            </tr>
+            <tr>
+              <th colspan="5" class="text-end">Discount</th>
+              <th>-₹{{ order.discount|floatformat:2 }}</th>
+            </tr>
+            <tr>
+              <th colspan="5" class="text-end">Grand Total</th>
+              <th>
+                <strong>₹{{ order.total|floatformat:2 }}</strong>
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="qr-section">
+        <h6>Scan for Order Summary</h6>
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" />
+      </div>
+
+      <div class="invoice-footer">
+        <p>
+          Need help? Email <a href="mailto:support@example.com">support@example.com</a> or call +91‑12345‑67890
+        </p>
+        <p>
+          © 2025 <strong>Findus</strong>. Designed by <strong>Manoj Paloi</strong>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 🎊 Repeated Confetti Bursts
+    document.addEventListener('DOMContentLoaded', () => {
+      function fireConfetti(particleCount, delay) {
+        setTimeout(() => {
+          confetti({
+            particleCount,
+            spread: 60,
+            origin: { y: 0.2 },
+            colors: ['#2563eb', '#10b981', '#f59e0b', '#dc2626'],
+            gravity: 0.75
+          })
+        }, delay)
+      }
+      ;[0, 300, 600, 900].forEach((d, i) => fireConfetti(80 - i * 15, d))
+    })
+  </script>
+{% endblock %}

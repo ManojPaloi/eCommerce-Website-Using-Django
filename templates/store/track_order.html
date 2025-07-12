@@ -1,0 +1,511 @@
+{% load static %}
+
+{% if not download_invoice %}
+  {% extends 'base.html' %}
+{% endif %}
+
+{% block content %}
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f4f7fa;
+      line-height: 1.6;
+    }
+    
+    /* Container */
+    .track-order-container {
+      padding: 3rem 1rem;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+    }
+    
+    /* Card */
+    .track-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      padding: 2.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      transition: transform 0.3s ease;
+    }
+    
+    /* Header */
+    .track-card h4 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 2rem;
+    }
+    
+    /* Timeline */
+    .step-timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 3rem;
+      padding: 0 1rem;
+    }
+    
+    .step-timeline::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 5%;
+      right: 5%;
+      height: 8px;
+      background: #e8ecef;
+      border-radius: 4px;
+      z-index: 1;
+    }
+    
+    /* Active Progress Line (Flipkart-style) */
+    .step-timeline::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 5%;
+      height: 8px;
+      background: #2563eb;
+      border-radius: 4px;
+      z-index: 2;
+      transition: width 0.5s ease;
+    }
+    
+    .step-timeline.order-placed::after {
+      width: 5%;
+    }
+    
+    .step-timeline.order-confirmed::after {
+      width: 35%;
+    }
+    
+    .step-timeline.order-shipped::after {
+      width: 65%;
+    }
+    
+    .step-timeline.order-delivered::after {
+      width: 95%;
+    }
+    
+    /* Each Step */
+    .step {
+      position: relative;
+      text-align: center;
+      z-index: 3;
+      width: 25%;
+      transition: transform 0.3s ease;
+    }
+    
+    .step:hover {
+      transform: translateY(-4px);
+    }
+    
+    .step .icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 0.75rem;
+      background: #d1d5db;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .step.active .icon {
+      background: #2563eb;
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.5);
+    }
+    
+    .step p {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #6b7280;
+      margin: 0;
+      transition: color 0.3s ease;
+    }
+    
+    .step.active p {
+      color: #2563eb;
+    }
+    
+    /* Delivery Info */
+    .order-info h5 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+    }
+    
+    .order-info p {
+      font-size: 0.95rem;
+      color: #4b5563;
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .order-info .col-md-6 {
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Status Badges */
+    .badge-status {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      display: inline-block;
+    }
+    
+    .badge-completed {
+      background: #22c55e;
+      color: #ffffff;
+    }
+    
+    .badge-pending {
+      background: #facc15;
+      color: #1f2937;
+    }
+    
+    .badge-failed {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    
+    /* Order Table */
+    .order-details-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.75rem;
+    }
+    
+    .order-details-table thead th {
+      background: #f9fafb;
+      color: #374151;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 1rem;
+      text-transform: uppercase;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .order-details-table tbody tr {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .order-details-table tbody tr:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .order-details-table tbody td {
+      padding: 1rem;
+      font-size: 0.95rem;
+      color: #4b5563;
+      vertical-align: middle;
+    }
+    
+    .product-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 1rem;
+    }
+    
+    /* Order Summary */
+    .order-summary {
+      max-width: 400px;
+      margin: 2.5rem auto 0;
+      padding: 1.5rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .order-summary h5 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 1.5rem;
+    }
+    
+    .order-summary .row {
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+    
+    .order-summary .col-6 {
+      color: #6b7280;
+      font-weight: 500;
+    }
+    
+    .order-summary .col-6.text-end {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+    
+    .order-summary .total-row {
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .order-summary .text-danger {
+      color: #ef4444 !important;
+    }
+    
+    /* Back Button */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #2563eb;
+      border: 2px solid #2563eb;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+    
+    .btn-back:hover {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 991px) {
+      .track-card {
+        padding: 1.5rem;
+      }
+    
+      .step-timeline {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+      }
+    
+      .step-timeline::before,
+      .step-timeline::after {
+        left: 24px;
+        width: 8px;
+        height: 80%;
+        top: 10%;
+      }
+    
+      .step {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+    
+      .step .icon {
+        margin-right: 1rem;
+        flex-shrink: 0;
+      }
+    
+      .order-summary {
+        max-width: 100%;
+        margin-top: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .track-card h4 {
+        font-size: 1.5rem;
+      }
+    
+      .order-details-table thead th,
+      .order-details-table tbody td {
+        font-size: 0.85rem;
+        padding: 0.75rem;
+      }
+    
+      .product-img {
+        width: 60px;
+        height: 60px;
+      }
+    
+      .btn-back {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+    
+    .hover-white:hover {
+      color: white !important;
+    }
+  </style>
+
+  <section class="track-order-container">
+    <div class="container">
+      <div class="track-card">
+        <h4 class="fw-bold">Tracking Order #{{ order.id }}</h4>
+
+        <!-- Order Status Timeline -->
+        <div class="step-timeline mb-5
+          {% if order.order_status == 'pending' %}
+            
+            order-placed
+
+          {% elif order.order_status == 'confirmed' %}
+            
+            order-confirmed
+
+          {% elif order.order_status == 'shipped' %}
+            
+            order-shipped
+
+          {% elif order.order_status == 'delivered' %}
+            
+            order-delivered
+
+          {% endif %}"
+          aria-label="Order progress timeline">
+          <div class="step {% if order.order_status in 'pending confirmed shipped delivered' %}active{% endif %}" title="Order Placed">
+            <div class="icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <p>Order Placed</p>
+          </div>
+          <div class="step {% if order.order_status in 'confirmed shipped delivered' %}active{% endif %}" title="Order Confirmed">
+            <div class="icon">
+              <i class="fas fa-clipboard-check"></i>
+            </div>
+            <p>Order Confirmed</p>
+          </div>
+          <div class="step {% if order.order_status in 'shipped delivered' %}active{% endif %}" title="Order Shipped">
+            <div class="icon">
+              <i class="fas fa-shipping-fast"></i>
+            </div>
+            <p>Order Shipped</p>
+          </div>
+          <div class="step {% if order.order_status == 'delivered' %}active{% endif %}" title="Order Delivered">
+            <div class="icon">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <p>Order Delivered</p>
+          </div>
+        </div>
+
+        <!-- Delivery and Payment Info -->
+        <div class="row mb-4 order-info">
+          <div class="col-md-6">
+            <h5>Delivery Address</h5>
+            <p>
+              <strong>{{ order.address_name|default:'Home' }}</strong><br />
+              {{ order.first_name }} {{ order.last_name }}<br />
+              {{ order.street }} {{ order.building }} {{ order.house }}<br />
+              {{ order.city }}, {{ order.state }} - {{ order.zip_code }}<br />
+              {{ order.country }}<br />
+              Phone: {{ order.country_code }}{{ order.phone }}
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h5>Payment Details</h5>
+            <p>
+              Method: <strong>{{ order.payment_method|title }}</strong><br />
+              Payment Status:{% if order.payment_status == 'completed' %}
+                <span class="badge-status badge-completed">Completed</span>
+              {% elif order.payment_status == 'pending' %}
+                <span class="badge-status badge-pending">Pending</span>
+              {% else %}
+                <span class="badge-status badge-failed">Failed</span>
+              {% endif %}
+              <br />
+              Total: <strong>₹{{ order.total }}</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Ordered Products Table -->
+        <div class="table-responsive">
+          <table class="order-details-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in order.items.all %}
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-3">
+                      {% if item.image1 %}
+                        <img src="{{ item.image1.url }}" alt="{{ item.product_name }}" class="product-img" />
+                      {% else %}
+                        <img src="{% static 'images/no-image.png' %}" alt="No image" class="product-img" />
+                      {% endif %}
+                      <span>{{ item.product_name }}</span>
+                    </div>
+                  </td>
+                  <td>{{ item.color|default:'-' }}</td>
+                  <td>{{ item.size|default:'-' }}</td>
+                  <td>₹{{ item.price }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>₹{{ item.total_price }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h5>Order Summary</h5>
+          <div class="row">
+            <div class="col-6">Subtotal</div>
+            <div class="col-6 text-end">₹{{ order.subtotal }}</div>
+          </div>
+          <div class="row">
+            <div class="col-6">Tax</div>
+            <div class="col-6 text-end">₹{{ order.tax }}</div>
+          </div>
+          <div class="row">
+            <div class="col-6">Delivery Charge</div>
+            <div class="col-6 text-end">₹{{ order.delivery_charge }}</div>
+          </div>
+          <div class="row">
+            <div class="col-6">Discount</div>
+            <div class="col-6 text-end text-danger">-₹{{ order.discount }}</div>
+          </div>
+          <div class="row total-row">
+            <div class="col-6">Total</div>
+            <div class="col-6 text-end">₹{{ order.total }}</div>
+          </div>
+        </div>
+
+        {% if not download_invoice %}
+          <a href="{% url 'my_orders' %}" class="btn-back hover-white"><i class="fas fa-arrow-left me-2"></i> Back to Orders</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- FontAwesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% endblock %}
