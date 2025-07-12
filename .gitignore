@@ -22,4 +22,4 @@ __pycache__/
 /staticfiles/
 
 # Media uploads (optional if you store media via file uploads)
-media/
+
