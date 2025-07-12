@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    .my-account-wrapper {
+      background: linear-gradient(145deg, #e9ecef 0%, #f5f7fa 100%);
+      padding: 2rem 0;
+    }
+    .card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+    .btn-primary,
+    .btn-outline-primary,
+    .btn-secondary {
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background: #007bff;
+      border: none;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+    .btn-outline-primary:hover {
+      background: #007bff;
+      color: #fff;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: #fff;
+    }
+    .form-control,
+    .form-control-plaintext,
+    textarea.form-control {
+      border-radius: 8px;
+      font-size: 0.95rem;
+      padding: 12px;
+      background: #f8f9fa;
+      border: 1px solid #e1e4e8;
+    }
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #003087;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: #007bff;
+      border-radius: 2px;
+    }
+    .logout-link:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    .alert {
+      border-radius: 10px;
+      font-size: 0.9rem;
+      padding: 15px;
+    }
+    .profile-pic-wrapper {
+      width: 140px;
+      height: 140px;
+      border: 5px solid #f1f3f6;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      background: #ffffff;
+      transition: transform 0.3s ease;
+    }
+    .profile-pic-wrapper:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .profile-pic-wrapper i {
+      font-size: 64px;
+      color: #007bff;
+    }
+    .profile-pic-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+
+  <section class="section-content my-account-wrapper" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+    <div class="card mx-auto" style="max-width: 840px; width: 100%; background: #ffffff;">
+      <article class="card-body p-5">
+        <header class="mb-5 text-center">
+          <h2 class="fw-bold mb-2 text-primary" style="font-size: 2.5rem;">My Account</h2>
+          <p class="text-muted" style="font-size: 1.05rem;">Personalize your profile and shopping experience</p>
+        </header>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}
+                
+                
+                
+                
+                
+                
+                alert-success
+
+
+
+
+
+
+              {% else %}
+                
+                
+                
+                
+                
+                
+                alert-danger
+
+
+
+
+
+
+              {% endif %} alert-dismissible fade show"
+              role="alert">
+              <p class="mb-0">{{ message }}</p>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" id="accountForm">
+          {% csrf_token %}
+
+          <div class="d-flex justify-content-end mb-4 flex-wrap">
+            <button type="button" id="editBtn" class="btn btn-outline-primary me-3">Edit Profile</button>
+            <button type="submit" id="updateBtn" class="btn btn-primary d-none me-2" style="color: white;">
+              Save Changes
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            </button>
+
+            <button type="button" id="cancelBtn" class="btn btn-secondary d-none" style="color: white;">Cancel</button>
+          </div>
+
+          <div class="form-group mb-5 text-center">
+            <label class="form-label d-block mb-3 fw-bold" style="font-size: 1.15rem;">Profile Picture</label>
+            <div class="profile-pic-wrapper mb-3" id="profilePicContainer">
+              {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="profilePicPreview" />
+              {% else %}
+                <i class="fa-solid fa-user"></i>
+              {% endif %}
+            </div>
+            <div id="profilePicInputWrapper" style="display:none;">
+              {{ form.profile_picture }}
+              {% if form.profile_picture.help_text %}
+                <small class="form-text text-muted">{{ form.profile_picture.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+
+          <section class="mb-5">
+            <h4 class="section-title mb-4">Personal Information</h4>
+            {% for field in form %}
+              {% if field.name != 'profile_picture' and field.name not in 'shopping_address shopping_preferences' %}
+                <div class="form-group mb-4">
+                  <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                  <p class="form-control-plaintext view-mode">{{ field.value|default:'Not set' }}</p>
+                  <div class="edit-mode" style="display:none;">
+                    {{ field }}
+                    {% if field.help_text %}
+                      <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </section>
+
+          <section class="mb-4">
+            <h4 class="section-title mb-4">Shopping Preferences</h4>
+            <div class="form-group mb-4">
+              <label class="form-label fw-bold">Shipping Address</label>
+              <p class="form-control-plaintext view-mode">{{ user.shopping_address|default:'No shipping address set' }}</p>
+              <div class="edit-mode" style="display:none;">
+                <textarea name="shopping_address" class="form-control" style="min-height: 120px;">{{ user.shopping_address }}</textarea>
+              </div>
+            </div>
+            <div class="form-group mb-4">
+              <label class="form-label fw-bold">Shopping Preferences</label>
+              <p class="form-control-plaintext view-mode">{{ user.shopping_preferences|default:'No preferences set' }}</p>
+              <div class="edit-mode" style="display:none;">
+                <textarea name="shopping_preferences" class="form-control" style="min-height: 120px;">{{ user.shopping_preferences }}</textarea>
+              </div>
+            </div>
+          </section>
+        </form>
+
+        <form method="post" action="{% url 'logout' %}" class="text-center mt-5">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-link logout-link text-decoration-none fw-semibold" style="font-size: 1.05rem; color: #007bff;">Log Out</button>
+        </form>
+      </article>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr('#id_date_of_birth', {
+      dateFormat: 'Y-m-d',
+      maxDate: 'today',
+      altInput: true,
+      altFormat: 'F j, Y'
+    })
+    
+    const editBtn = document.getElementById('editBtn')
+    const updateBtn = document.getElementById('updateBtn')
+    const cancelBtn = document.getElementById('cancelBtn')
+    
+    editBtn.addEventListener('click', () => toggleEdit(true))
+    cancelBtn.addEventListener('click', () => location.reload())
+    
+    function toggleEdit(isEdit) {
+      document.querySelectorAll('.view-mode').forEach((el) => (el.style.display = isEdit ? 'none' : 'block'))
+      document.querySelectorAll('.edit-mode').forEach((el) => (el.style.display = isEdit ? 'block' : 'none'))
+      document.getElementById('profilePicInputWrapper').style.display = isEdit ? 'block' : 'none'
+      editBtn.classList.toggle('d-none', isEdit)
+      updateBtn.classList.toggle('d-none', !isEdit)
+      cancelBtn.classList.toggle('d-none', !isEdit)
+    }
+    
+    const profileInput = document.querySelector('input[type="file"][name="profile_picture"]')
+    const profilePreview = document.getElementById('profilePicPreview')
+    if (profileInput) {
+      profileInput.addEventListener('change', function (e) {
+        const file = e.target.files[0]
+        if (file) {
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            if (profilePreview) {
+              profilePreview.src = e.target.result
+            } else {
+              const img = document.createElement('img')
+              img.id = 'profilePicPreview'
+              img.src = e.target.result
+              img.style.width = '100%'
+              img.style.height = '100%'
+              img.style.objectFit = 'cover'
+              const container = document.getElementById('profilePicContainer')
+              container.innerHTML = ''
+              container.appendChild(img)
+            }
+          }
+          reader.readAsDataURL(file)
+        }
+      })
+    }
+    
+    document.getElementById('accountForm').addEventListener('submit', function () {
+      updateBtn.disabled = true
+      updateBtn.querySelector('span.spinner-border').classList.remove('d-none')
+      updateBtn.innerHTML = 'Saving... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+    })
+    
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach((alert) => {
+        alert.classList.remove('show')
+        alert.classList.add('fade')
+        setTimeout(() => alert.remove(), 500)
+      })
+    }, 5000)
+  </script>
+{% endblock %}

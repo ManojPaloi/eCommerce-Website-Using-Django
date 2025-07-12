@@ -1,0 +1,25 @@
+# Python virtual environments
+env/
+venv/
+.venv/
+.env
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# VS Code settings
+.vscode/
+
+# Log files
+*.log
+
+# SQLite database
+*.sqlite3
+
+# Collected static files
+/staticfiles/
+
+# Media uploads (optional if you store media via file uploads)
+media/

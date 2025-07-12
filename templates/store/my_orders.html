@@ -1,0 +1,472 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <section class="section-content py-5 bg-light">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Sidebar -->
+        <aside class="col-lg-3 col-md-4 sidebar">
+          <div class="card border-0 shadow-sm rounded-3">
+            <ul class="list-group list-group-flush">
+              <a class="list-group-item list-group-item-action active hover-white" href="{% url 'my_orders' %}"><i class="fas fa-box-open me-2"></i> My Order History</a>
+              <a class="list-group-item list-group-item-action" href="{% url 'my_account' %}"><i class="fas fa-user-circle me-2"></i> My Account</a>
+              <a class="list-group-item list-group-item-action" href="{% url 'wishlist' %}"><i class="fas fa-heart me-2"></i> Wishlist</a>
+              <a class="list-group-item list-group-item-action" href="{% url 'customer_support' %}"><i class="fas fa-headset me-2"></i> 24 X 7 Customer Support</a>
+            </ul>
+            <div class="card-body">
+              <a class="btn btn-outline-danger w-100" href="{% url 'logout' %}"><i class="fas fa-power-off me-2"></i> Log out</a>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="col-lg-9 col-md-8">
+          <h3 class="mb-4 fw-bold text-dark">My Orders</h3>
+
+          {% if orders %}
+            {% for order in orders %}
+              <article class="card order-card mb-4 border-0 shadow-sm rounded-3">
+                <header class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top flex-wrap gap-3">
+                  <div>
+                    <strong>Order ID: {{ order.id }}</strong><br />
+                    <small>Placed on: {{ order.created_at|date:'j M Y, H:i' }}</small>
+                  </div>
+                  <div>
+                    <span class="badge
+                                        {% if order.order_status == 'pending' %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                            bg-warning text-dark
+
+
+
+
+
+
+
+
+
+
+                      {% elif order.order_status == 'confirmed' %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                            bg-info
+
+
+
+
+
+
+
+
+
+
+                      {% elif order.order_status == 'shipped' %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                            bg-primary
+
+
+
+
+
+
+
+
+
+
+                      {% elif order.order_status == 'delivered' %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                            bg-success
+
+
+
+
+
+
+
+
+
+
+                      {% elif order.order_status == 'cancelled' %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                            bg-danger
+
+
+
+
+
+
+
+
+
+
+                      {% else %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                            bg-secondary
+
+
+
+
+
+
+
+
+
+
+                      {% endif %}
+                                        rounded-pill px-3 py-2">
+                      {{ order.order_status|title }}
+                    </span>
+                  </div>
+                </header>
+
+                <div class="card-body">
+                  <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                      <h6 class="text-uppercase text-secondary fw-semibold">Delivery To</h6>
+                      <address class="mb-0 text-muted">
+                        {{ order.first_name }} {{ order.last_name }}<br />
+                        {{ order.street }} {{ order.building }} {{ order.house }}<br />
+                        {{ order.city }}, {{ order.state }}<br />
+                        {{ order.postal_code }} {{ order.zip_code }}<br />
+                        {{ order.country }}<br />
+                        <strong>Phone:</strong> {{ order.country_code }}{{ order.phone }}<br />
+                        <strong>Email:</strong> {{ order.email }}
+                      </address>
+                    </div>
+                    <div class="col-md-6">
+                      <h6 class="text-uppercase text-secondary fw-semibold">Payment</h6>
+                      <p class="mb-1">
+                        Method: <strong>{{ order.payment_method|title }}</strong>
+                      </p>
+                      <p class="mb-1">
+                        Status:{% if order.payment_status == 'completed' %}
+                          <span class="badge bg-success">Completed</span>
+                        {% elif order.payment_status == 'pending' %}
+                          <span class="badge bg-warning text-dark">Pending</span>
+                        {% else %}
+                          <span class="badge bg-danger">Failed</span>
+                        {% endif %}
+                      </p>
+                      <p class="mb-0 text-muted">
+                        Subtotal: ₹{{ order.subtotal|floatformat:2 }}<br />
+                        Delivery: ₹{{ order.delivery_charge|floatformat:2 }}<br />
+                        Discount: ₹{{ order.discount|floatformat:2 }}<br />
+                        <strong>Total: ₹{{ order.total|floatformat:2 }}</strong>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table align-middle table-hover border-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th scope="col" style="min-width: 200px;">Product</th>
+                          <th scope="col" class="text-center">Color</th>
+                          <th scope="col" class="text-center">Size</th>
+                          <th scope="col" class="text-center">Unit Price</th>
+                          <th scope="col" class="text-center">Qty</th>
+                          <th scope="col" class="text-center">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in order.items.all %}
+                          <tr>
+                            <td class="d-flex align-items-center gap-3">
+                              {% if item.image1 %}
+                                <img src="{{ item.image1.url }}" alt="{{ item.product_name }}" class="img-thumbnail rounded" style="height: 60px; width: auto; object-fit: cover;" />
+                              {% else %}
+                                <img src="{% static 'images/no-image.png' %}" alt="No image" class="img-thumbnail rounded" style="height: 60px; width: auto; object-fit: cover;" />
+                              {% endif %}
+                              <span>{{ item.product_name }}</span>
+                            </td>
+                            <td class="text-center">{{ item.color|title|default:'-' }}</td>
+                            <td class="text-center">{{ item.size|title|default:'-' }}</td>
+                            <td class="text-center">₹{{ item.price|floatformat:2 }}</td>
+                            <td class="text-center">{{ item.quantity }}</td>
+                            <td class="text-center">₹{{ item.total_price|floatformat:2 }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4 flex-wrap gap-2">
+                    <a href="{% url 'track_order' order.id %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-map-marker-alt me-2"></i> Track Order</a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm"><i class="fas fa-info-circle me-2"></i> Details</a>
+                    <button onclick="window.print()" class="btn btn-primary btn-sm btn-custom"><i class="fas fa-download me-2"></i> Download Invoice</button>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          {% else %}
+            <div class="alert alert-info text-center py-4 rounded-3 shadow-sm">
+              <i class="fas fa-info-circle me-2"></i> You have no orders yet.
+            </div>
+          {% endif %}
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .btn-custom:hover {
+      color: white !important;
+    }
+    .btn-outline-primary:hover {
+      color: white !important;
+    }
+    
+    .btn-outline-danger:hover {
+      color: white !important;
+    }
+    
+    .hover-white:hover {
+      color: white !important;
+    }
+    /* Custom Styles for Enhanced Design and Responsiveness */
+    .section-content {
+      min-height: calc(100vh - 120px);
+      background-color: #f5f7fa;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    /* Sidebar Styling */
+    .sidebar .card {
+      background: #ffffff;
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .sidebar .card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .list-group-item {
+      border-radius: 8px;
+      padding: 12px 20px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .list-group-item:hover {
+      background-color: #f1f3f5;
+    }
+    
+    .list-group-item.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    
+    .list-group-item i {
+      width: 20px;
+    }
+    
+    /* Order Card Styling */
+    .order-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .order-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-header {
+      padding: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .badge {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+    
+    /* Table Styling */
+    .table {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .table th,
+    .table td {
+      padding: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .table img {
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    
+    /* Buttons */
+    .btn-sm {
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    
+    .btn-outline-secondary {
+      border: 1px solid #dee2e6;
+      background: white;
+    }
+    
+    .btn-outline-secondary:hover {
+      background: #f8f9fa;
+      border-color: #ced4da;
+    }
+    
+    .btn-custom {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 991px) {
+      .sidebar {
+        margin-bottom: 30px;
+      }
+    
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+      }
+    
+      .table th,
+      .table td {
+        padding: 12px;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .table-responsive {
+        font-size: 0.9rem;
+      }
+    
+      .table img {
+        height: 50px;
+      }
+    
+      .btn-sm {
+        padding: 7px 16px;
+        font-size: 0.85rem;
+      }
+    
+      .card-header {
+        font-size: 0.95rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .table th,
+      .table td {
+        padding: 10px;
+        font-size: 0.85rem;
+      }
+    
+      .d-flex.align-items-center.gap-3 span {
+        font-size: 0.8rem;
+      }
+    
+      .card-body address,
+      .card-body p {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Print Styles */
+    @media print {
+      .sidebar,
+      .btn-sm {
+        display: none;
+      }
+    
+      .order-card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+      }
+    
+      .card-header {
+        background-color: #f8f9fa !important;
+        color: black !important;
+      }
+    
+      .badge {
+        border: 1px solid #000;
+        background: transparent !important;
+        color: black !important;
+      }
+    
+      .table {
+        font-size: 12px;
+      }
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <!-- ========================= SECTION PAGETOP ========================= -->
+  <section class="section-pagetop bg-light border-bottom py-4">
+    <div class="container">
+      <h2 class="title-page mb-1" style="font-weight: 600; font-size: 2rem; color: #333;">My Wishlist</h2>
+      <nav aria-label="breadcrumb" style="font-size: 0.9rem; color: #666;">
+        <ol class="breadcrumb bg-transparent p-0 mb-0">
+          <li class="breadcrumb-item">
+            <a href="{% url 'store' %}">Store</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page" style="color: #555;">Wishlist</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+  <!-- ========================= SECTION PAGETOP END// ========================= -->
+
+  <!-- ========================= SECTION CONTENT ========================= -->
+  <section class="section-content padding-y">
+    <div class="container">
+      <a href="{% url 'store' %}" class="btn btn-outline-primary mb-4 custom-hover-white">← Back to Store</a>
+
+      <div class="row">
+        <main class="col-md-12">
+          <!-- Wishlist Container -->
+          <div id="wishlist-container" class="row">
+            <!-- Wishlist items will be dynamically populated here -->
+          </div>
+
+          <!-- Empty Wishlist Message -->
+          <div id="empty-wishlist" class="alert alert-info text-center" style="display: none;">
+            Your wishlist is empty. Start adding products from the <a href="{% url 'store' %}" class="alert-link">store</a>!
+          </div>
+
+          <!-- Pagination Placeholder (if needed) -->
+          <nav class="mt-4" aria-label="Page navigation" id="pagination" style="display: none;">
+            <ul class="pagination">
+              <!-- Pagination will be dynamically populated if needed -->
+            </ul>
+          </nav>
+        </main>
+      </div>
+    </div>
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+
+  <style>
+    .custom-hover-white {
+      color: white !important;
+      background-color: #0d6efd; /* Match Bootstrap primary */
+      border-color: #0d6efd !important;
+    }
+
+    /* Reuse styles from store.html for consistency */
+    .card-product-grid {
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    .img-wrap {
+      background-color: #f8f9fa;
+      position: relative;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .img-wrap img {
+      height: 200px;
+      object-fit: contain;
+      max-width: 100%;
+    }
+
+    .wishlist-btn {
+      background-color: #ffffff; /* Always white background */
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      color: #888888; /* Default icon color */
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+    }
+
+    .wishlist-btn:hover {
+      color: #e53935; /* Red on hover */
+    }
+
+    .wishlist-btn.active i {
+      color: #e53935; /* Red when active */
+    }
+
+    .wishlist-btn i {
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
+
+    .info-wrap {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem !important;
+      min-height: 120px;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.4;
+      max-height: 3rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-bottom: 0.5rem;
+    }
+
+    .title:hover {
+      color: #007bff;
+    }
+
+    .category {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #555;
+      background-color: #f1f3f5;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 0.5rem;
+    }
+
+    .category-label {
+      font-weight: 700;
+      color: #212529;
+    }
+
+    .price-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-height: 1.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .discounted-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #212121;
+    }
+
+    .mrp-price {
+      font-size: 0.9rem;
+      color: #878787;
+    }
+
+    .mrp-price small {
+      font-size: 0.85rem;
+    }
+
+    .mrp-price del {
+      color: #878787;
+      font-size: 0.9rem;
+    }
+
+    .discount-percentage {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #388e3c;
+    }
+
+    .same-day-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #fff;
+      background-color: #007bff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .hover-shadow:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+      transform: translateY(-4px);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 767.98px) {
+      .title {
+        font-size: 1rem;
+        max-height: 2.8rem;
+      }
+      .discounted-price {
+        font-size: 1.1rem;
+      }
+      .mrp-price,
+      .mrp-price del {
+        font-size: 0.85rem;
+      }
+      .mrp-price small {
+        font-size: 0.8rem;
+      }
+      .discount-percentage {
+        font-size: 0.85rem;
+      }
+      .price-wrap {
+        gap: 4px;
+        min-height: 1.4rem;
+      }
+      .same-day-badge {
+        font-size: 0.7rem;
+      }
+      .info-wrap {
+        padding: 0.75rem !important;
+        min-height: 100px;
+      }
+      .category {
+        font-size: 0.8rem;
+        padding: 3px 6px;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .title {
+        font-size: 0.9rem;
+        max-height: 2.6rem;
+      }
+      .discounted-price {
+        font-size: 1rem;
+      }
+      .mrp-price,
+      .mrp-price del {
+        font-size: 0.8rem;
+      }
+      .mrp-price small {
+        font-size: 0.75rem;
+      }
+      .discount-percentage {
+        font-size: 0.8rem;
+      }
+      .price-wrap {
+        gap: 3px;
+        min-height: 1.3rem;
+      }
+      .same-day-badge {
+        font-size: 0.65rem;
+      }
+      .img-wrap img {
+        height: 180px;
+      }
+      .info-wrap {
+        min-height: 100px;
+      }
+      .category {
+        font-size: 0.75rem;
+        padding: 2px 4px;
+      }
+    }
+  </style>
+
+  <script>
+    // Utility function to get CSRF token from cookies
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create alert container for notifications
+      const alertContainer = document.createElement('div');
+      alertContainer.style.position = 'fixed';
+      alertContainer.style.top = '20px';
+      alertContainer.style.left = '50%';
+      alertContainer.style.transform = 'translateX(-50%)';
+      alertContainer.style.zIndex = '1000';
+      alertContainer.style.width = '90%';
+      alertContainer.style.maxWidth = '500px';
+      document.body.appendChild(alertContainer);
+
+      // Function to show alert with duration
+      function showAlert(message, type = 'success', duration = 3000) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show text-center`;
+        alertDiv.role = 'alert';
+        alertDiv.style.borderRadius = '8px';
+        alertDiv.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+        alertDiv.style.padding = '15px';
+        alertDiv.innerHTML = `
+          ${message}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        `;
+        alertContainer.appendChild(alertDiv);
+        setTimeout(() => {
+          alertDiv.classList.remove('show');
+          alertDiv.classList.add('fade');
+          setTimeout(() => alertDiv.remove(), 150);
+        }, duration);
+      }
+
+      // Function to render wishlist items
+      function renderWishlist() {
+        const wishlistContainer = document.getElementById('wishlist-container');
+        const emptyWishlist = document.getElementById('empty-wishlist');
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+        wishlistContainer.innerHTML = '';
+
+        if (wishlist.length === 0) {
+          emptyWishlist.style.display = 'block';
+          return;
+        }
+
+        emptyWishlist.style.display = 'none';
+
+        wishlist.forEach(product => {
+          // Validate slugs
+          if (!product.categorySlug || !product.productSlug) {
+            console.warn(`Invalid slugs for product ${product.name}: categorySlug=${product.categorySlug}, productSlug=${product.productSlug}`);
+            return;
+          }
+
+          const productCard = document.createElement('div');
+          productCard.className = 'col-md-4 mb-4';
+          const productDetailUrl = `/store/category/${product.categorySlug}/${product.productSlug}/`;
+          productCard.innerHTML = `
+            <figure class="card card-product-grid shadow-sm border-0 rounded-4 hover-shadow" style="transition: 0.3s;">
+              <div class="img-wrap text-center p-3 bg-light rounded-top-4">
+                <a href="${productDetailUrl}">
+                  <img src="${product.imageUrl}" alt="${product.name}" class="img-fluid" style="height: 200px; object-fit: contain;" />
+                </a>
+                <button class="wishlist-btn active" data-product-id="${product.id}">
+                  <i class="fas fa-heart"></i>
+                </button>
+              </div>
+              <figcaption class="info-wrap p-3">
+                <a href="${productDetailUrl}" class="title fw-bold text-dark">${product.name.substring(0, 30)}</a>
+                <div class=""><span class="category-label">Category: </span><p class="category">${product.category}</p></div>
+                <div class="price-wrap mt-1">
+                  <span class="discounted-price">₹${product.price}</span>
+                  ${product.originalPrice > product.price ?
+                    `<span class="mrp-price text-muted"><small>M.R.P.: </small><del>₹${product.originalPrice}</del></span>
+                     <span class="discount-percentage text-success">${product.discountPercentage}</span>` :
+                    `<span class="mrp-price text-muted"><small>M.R.P.: </small>₹${product.originalPrice}</span>`}
+                  ${product.isSameDayDelivery ?
+                    `<div class="same-day-badge"><i class="fas fa-shipping-fast"></i> Same-Day Delivery</div>` : ''}
+                </div>
+              </figcaption>
+            </figure>
+          `;
+          wishlistContainer.appendChild(productCard);
+        });
+
+        // Attach event listeners to wishlist buttons
+        const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+        wishlistButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist = wishlist.filter(item => item.id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            showAlert('Product removed from wishlist successfully!', 'danger');
+            renderWishlist();
+          });
+        });
+      }
+
+      // Initial render
+      renderWishlist();
+    });
+  </script>
+{% endblock %}

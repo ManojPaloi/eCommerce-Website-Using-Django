@@ -1,0 +1,823 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Contact Us
+{% endblock %}
+
+{% block content %}
+  <!-- AOS Animate On Scroll -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Container & Layout */
+    .contact-wrapper {
+      max-width: 1200px;
+      margin: 80px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Left side: Form */
+    .contact-form-container {
+      flex: 1 1 600px;
+      padding: 60px;
+      background-color: #f8fafc;
+    }
+    
+    .contact-form-container h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 30px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Floating labels */
+    .form-group {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    
+    input[type='text'],
+    input[type='email'],
+    textarea {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      resize: vertical;
+    }
+    
+    input[type='text']:focus,
+    input[type='email']:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #1e3a8a;
+      box-shadow: 0 0 8px rgba(30, 58, 138, 0.2);
+    }
+    
+    /* Validation icons */
+    .form-group.valid input,
+    .form-group.valid textarea {
+      border-color: #16a34a !important;
+      box-shadow: 0 0 8px rgba(22, 163, 74, 0.3) !important;
+    }
+    
+    .form-group.invalid input,
+    .form-group.invalid textarea {
+      border-color: #dc2626 !important;
+      box-shadow: 0 0 8px rgba(220, 38, 38, 0.3) !important;
+    }
+    
+    .validation-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .form-group.valid .validation-icon.valid-icon {
+      color: #16a34a;
+      opacity: 1;
+    }
+    
+    .form-group.invalid .validation-icon.invalid-icon {
+      color: #dc2626;
+      opacity: 1;
+    }
+    
+    label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      color: #6b7280;
+      font-size: 1rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      background: #ffffff;
+      padding: 0 4px;
+    }
+    
+    input:not(:placeholder-shown) + label,
+    textarea:not(:placeholder-shown) + label,
+    input:focus + label,
+    textarea:focus + label {
+      top: -8px;
+      left: 12px;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+      font-weight: 600;
+    }
+    
+    textarea {
+      min-height: 120px;
+      scrollbar-width: thin;
+      scrollbar-color: #1e3a8a #f0f0f0;
+    }
+    
+    textarea::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    textarea::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 4px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb {
+      background-color: #1e3a8a;
+      border-radius: 4px;
+    }
+    
+    /* Character count */
+    .char-counter {
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-align: right;
+      margin-top: 8px;
+      user-select: none;
+    }
+    
+    /* Submit Button */
+    .btn-submit {
+      background-color: #1e3a8a;
+      color: #ffffff;
+      border: none;
+      padding: 14px 40px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-submit[disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    .btn-submit .spinner {
+      border: 2px solid #ffffff;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .btn-submit:hover:not([disabled]),
+    .btn-submit:focus:not([disabled]) {
+      background-color: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+    }
+    
+    /* Right side: Info */
+    .contact-info-container {
+      flex: 1 1 400px;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: #ffffff;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .contact-info-container h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 24px;
+    }
+    
+    .contact-info-container p {
+      font-size: 1.1rem;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    
+    .social-icons {
+      margin-top: 32px;
+      display: flex;
+      gap: 16px;
+    }
+    
+    .social-icon {
+      color: #ffffff;
+      font-size: 1.8rem;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    
+    /* Unique hover effects for each social icon */
+    .social-icon.github:hover {
+      background-color: #333333;
+      transform: scale(1.1);
+    }
+    
+    .social-icon.linkedin:hover {
+      background-color: #0a66c2;
+      transform: scale(1.1);
+    }
+    
+    .social-icon.email:hover {
+      background-color: #d44638;
+      transform: scale(1.1);
+    }
+    
+    .social-icon.twitter:hover {
+      background-color: #1da1f2;
+      transform: scale(1.1);
+    }
+    
+    /* Confetti container */
+    #confetti {
+      position: fixed;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+    }
+    
+    /* Alert styles */
+    .alert {
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .alert-success {
+      background-color: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    
+    .alert-danger {
+      background-color: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    
+    .btn-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    
+    .btn-close:hover {
+      opacity: 1;
+    }
+    
+    /* Success Overlay */
+    .success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+    }
+    
+    .success-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .success-checkmark {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .success-checkmark .check-icon {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .success-checkmark .check-icon .icon-line {
+      position: absolute;
+      background-color: #16a34a;
+      border-radius: 2px;
+    }
+    
+    .success-checkmark .check-icon .icon-line.line-tip {
+      width: 40px;
+      height: 8px;
+      top: 60px;
+      left: 20px;
+      transform: rotate(45deg);
+      animation: icon-line-tip 0.75s;
+    }
+    
+    .success-checkmark .check-icon .icon-line.line-long {
+      width: 70px;
+      height: 8px;
+      top: 50px;
+      right: 20px;
+      transform: rotate(-45deg);
+      animation: icon-line-long 0.75s;
+    }
+    
+    @keyframes icon-line-tip {
+      0% {
+        width: 0;
+        left: 10px;
+        top: 70px;
+      }
+      54% {
+        width: 0;
+        left: 10px;
+        top: 70px;
+      }
+      70% {
+        width: 40px;
+        left: 20px;
+        top: 60px;
+      }
+      84% {
+        width: 20px;
+        left: 30px;
+        top: 55px;
+      }
+      100% {
+        width: 40px;
+        left: 20px;
+        top: 60px;
+      }
+    }
+    
+    @keyframes icon-line-long {
+      0% {
+        width: 0;
+        right: 50px;
+        top: 70px;
+      }
+      65% {
+        width: 0;
+        right: 50px;
+        top: 70px;
+      }
+      84% {
+        width: 55px;
+        right: 25px;
+        top: 50px;
+      }
+      100% {
+        width: 70px;
+        right: 20px;
+        top: 50px;
+      }
+    }
+    
+    .success-message {
+      text-align: center;
+      max-width: 500px;
+      padding: 0 20px;
+    }
+    
+    .success-message h2 {
+      color: #16a34a;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    .success-message p {
+      color: #334155;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    
+    .success-message .btn-continue {
+      margin-top: 30px;
+      padding: 12px 30px;
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .success-message .btn-continue:hover {
+      background-color: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+    }
+  </style>
+
+  <!-- Success Overlay (hidden by default) -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-checkmark">
+      <div class="check-icon">
+        <span class="icon-line line-tip"></span>
+        <span class="icon-line line-long"></span>
+      </div>
+    </div>
+    <div class="success-message">
+      <h2>Thank You, {{ request.user.first_name }}!</h2>
+      <p>Your message has been sent successfully.</p>
+      <p>We've received your inquiry and will get back to you within 24 hours.</p>
+      <p>
+        For urgent matters, please call us at <strong>+91 9547184274</strong>.
+      </p>
+      <button class="btn-continue" onclick="hideSuccessOverlay()">Continue Browsing</button>
+    </div>
+  </div>
+
+  <div class="contact-wrapper" role="main" aria-label="Contact form and information section" data-aos="fade-up">
+    <!-- Contact Form -->
+    <div class="contact-form-container" data-aos="fade-right" data-aos-delay="150">
+      <h2>Get in Touch</h2>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" aria-live="assertive">
+            {% if message.tags == 'success' %}
+              <svg aria-hidden="true" viewBox="0 0 16 16" style="width:20px; height:20px; fill:#16a34a; vertical-align:middle; margin-right:8px;">
+                <path d="M13.485 1.929a.75.75 0 0 1 1.06 1.06l-8.25 8.25a.75.75 0 0 1-1.06 0l-4.25-4.25a.75.75 0 0 1 1.06-1.06l3.72 3.72 7.72-7.72z" />
+              </svg>
+            {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'contact_us' %}" id="contactForm" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group valid">
+          <input type="text" id="name" name="name" value="{{ full_name }}" placeholder=" " readonly aria-label="Your Name" />
+          <label for="name">Your Name</label>
+          <span class="validation-icon valid-icon" aria-hidden="true">✔</span>
+        </div>
+
+        <div class="form-group valid">
+          <input type="email" id="email" name="email" value="{{ email }}" placeholder=" " readonly aria-label="Your Email" />
+          <label for="email">Your Email</label>
+          <span class="validation-icon valid-icon" aria-hidden="true">✔</span>
+        </div>
+
+        <div class="form-group valid">
+          <input type="text" id="mobile" name="mobile" value="{{ mobile }}" placeholder=" " readonly aria-label="Mobile Number" />
+          <label for="mobile">Mobile Number</label>
+          <span class="validation-icon valid-icon" aria-hidden="true">✔</span>
+        </div>
+
+        <div class="form-group" id="subject-group">
+          <input type="text" id="subject" name="subject" placeholder=" " required aria-describedby="subjectHelp" aria-label="Subject" autocomplete="off" />
+          <label for="subject">Subject</label>
+          <span class="validation-icon valid-icon" aria-hidden="true">✔</span>
+          <span class="validation-icon invalid-icon" aria-hidden="true">✖</span>
+          <div id="subjectHelp" class="form-text text-danger" style="display:none;">Please enter a subject.</div>
+        </div>
+
+        <div class="form-group" id="message-group">
+          <textarea id="message" name="message" placeholder=" " required aria-describedby="messageHelp messageCount" aria-label="Message" maxlength="500" autocomplete="off"></textarea>
+          <label for="message">Message</label>
+          <span class="validation-icon valid-icon" aria-hidden="true">✔</span>
+          <span class="validation-icon invalid-icon" aria-hidden="true">✖</span>
+          <div id="messageHelp" class="form-text text-danger" style="display:none;">Please enter a message.</div>
+          <div id="messageCount" class="char-counter" aria-live="polite" aria-atomic="true">0 / 500</div>
+        </div>
+
+        <button type="submit" class="btn-submit" aria-label="Send Message">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Contact Info & Social -->
+    <div class="contact-info-container" aria-label="Contact information and social media links" data-aos="fade-left" data-aos-delay="300">
+      <h3>Contact Info</h3>
+      <p>
+        <strong>Email:</strong> paloimanoj@gmail.com
+      </p>
+      <p>
+        <strong>Phone:</strong> +91 9547184274
+      </p>
+
+      <div class="social-icons" role="list">
+        <a href="https://github.com/ManojPaloi" target="_blank" class="social-icon github" role="listitem" aria-label="GitHub" tabindex="0"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/manoj-paloi/" target="_blank" class="social-icon linkedin" role="listitem" aria-label="LinkedIn" tabindex="0"><i class="fab fa-linkedin-in"></i></a>
+        <a href="mailto:paloimanoj@gmail.com" class="social-icon email" role="listitem" aria-label="Email" tabindex="0"><i class="fas fa-envelope"></i></a>
+        <a href="https://x.com/PaloiManoj" target="_blank" class="social-icon twitter" role="listitem" aria-label="Twitter" tabindex="0"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti container -->
+  <div id="confetti"></div>
+
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <script>
+    // Initialize AOS animations
+    AOS.init({ once: true, duration: 1000 })
+    
+    // Get user's first name
+    const firstName = '{{ request.user.first_name }}'
+    
+    // Success overlay functions
+    function showSuccessOverlay() {
+      document.getElementById('successOverlay').classList.add('active')
+      document.body.style.overflow = 'hidden'
+      launchConfetti()
+    }
+    
+    function hideSuccessOverlay() {
+      document.getElementById('successOverlay').classList.remove('active')
+      document.body.style.overflow = ''
+    }
+    
+    // Validation helpers
+    function setValid(el) {
+      el.classList.remove('invalid')
+      el.classList.add('valid')
+      const validIcon = el.querySelector('.valid-icon')
+      const invalidIcon = el.querySelector('.invalid-icon')
+      if (validIcon) validIcon.style.opacity = '1'
+      if (invalidIcon) invalidIcon.style.opacity = '0'
+      const help = el.querySelector('.form-text')
+      if (help) help.style.display = 'none'
+    }
+    
+    function setInvalid(el, msg) {
+      el.classList.remove('valid')
+      el.classList.add('invalid')
+      const validIcon = el.querySelector('.valid-icon')
+      const invalidIcon = el.querySelector('.invalid-icon')
+      if (validIcon) validIcon.style.opacity = '0'
+      if (invalidIcon) invalidIcon.style.opacity = '1'
+      const help = el.querySelector('.form-text')
+      if (help) {
+        help.textContent = msg || 'This field is required'
+        help.style.display = 'block'
+      }
+    }
+    
+    // Validate Subject and Message
+    const subjectGroup = document.getElementById('subject-group')
+    const subjectInput = subjectGroup.querySelector('input')
+    const messageGroup = document.getElementById('message-group')
+    const messageInput = messageGroup.querySelector('textarea')
+    const messageCount = document.getElementById('messageCount')
+    const maxMessageLength = 500
+    
+    // Validate subject on input
+    subjectInput.addEventListener('input', () => {
+      if (subjectInput.value.trim() === '') {
+        setInvalid(subjectGroup, 'Please enter a subject.')
+      } else {
+        setValid(subjectGroup)
+      }
+    })
+    
+    // Validate message on input and update character count
+    messageInput.addEventListener('input', () => {
+      const length = messageInput.value.length
+      messageCount.textContent = `${length} / ${maxMessageLength}`
+    
+      if (length === 0) {
+        setInvalid(messageGroup, 'Please enter a message.')
+      } else if (length > maxMessageLength) {
+        setInvalid(messageGroup, `Message cannot exceed ${maxMessageLength} characters.`)
+      } else {
+        setValid(messageGroup)
+      }
+    })
+    
+    // Form submit handler
+    const form = document.getElementById('contactForm')
+    const submitBtn = form.querySelector('.btn-submit')
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+    
+      // Validate all fields before submission
+      let isValid = true
+    
+      // Validate subject
+      if (subjectInput.value.trim() === '') {
+        setInvalid(subjectGroup, 'Please enter a subject.')
+        isValid = false
+      } else {
+        setValid(subjectGroup)
+      }
+    
+      // Validate message
+      if (messageInput.value.trim() === '') {
+        setInvalid(messageGroup, 'Please enter a message.')
+        isValid = false
+      } else if (messageInput.value.length > maxMessageLength) {
+        setInvalid(messageGroup, `Message cannot exceed ${maxMessageLength} characters.`)
+        isValid = false
+      } else {
+        setValid(messageGroup)
+      }
+    
+      if (!isValid) {
+        // Focus on the first invalid field
+        if (subjectInput.value.trim() === '') {
+          subjectInput.focus()
+        } else if (messageInput.value.trim() === '' || messageInput.value.length > maxMessageLength) {
+          messageInput.focus()
+        }
+        return
+      }
+    
+      // Disable button and show spinner
+      submitBtn.disabled = true
+      submitBtn.innerHTML = `<span class="spinner" aria-hidden="true"></span> Sending...`
+    
+      try {
+        const formData = new FormData(form)
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: formData
+        })
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+    
+        const data = await response.json()
+    
+        if (data.success) {
+          // Show success overlay
+          showSuccessOverlay()
+    
+          // Reset the form (except readonly fields)
+          subjectInput.value = ''
+          messageInput.value = ''
+          messageCount.textContent = '0 / 500'
+    
+          // Set valid states
+          setValid(subjectGroup)
+          setValid(messageGroup)
+        } else {
+          // Show error message
+          const alertDiv = document.createElement('div')
+          alertDiv.className = 'alert alert-danger alert-dismissible fade show'
+          alertDiv.setAttribute('role', 'alert')
+          alertDiv.innerHTML = `
+                <svg aria-hidden="true" viewBox="0 0 16 16" style="width:20px; height:20px; fill:#dc2626; vertical-align:middle; margin-right:8px;">
+                  <path d="M8.75 4.75a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 1.5 0v-3.5zm-1.5 6a.75.75 0 0 1 1.5 0v1a.75.75 0 0 1-1.5 0v-1z"/>
+                  <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM2.5 8a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0z"/>
+                </svg>
+                ${data.message || 'Failed to send message. Please try again.'}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              `
+          form.insertBefore(alertDiv, form.firstChild)
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        // Show error message
+        const alertDiv = document.createElement('div')
+        alertDiv.className = 'alert alert-danger alert-dismissible fade show'
+        alertDiv.setAttribute('role', 'alert')
+        alertDiv.innerHTML = `
+              <svg aria-hidden="true" viewBox="0 0 16 16" style="width:20px; height:20px; fill:#dc2626; vertical-align:middle; margin-right:8px;">
+                <path d="M8.75 4.75a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 1.5 0v-3.5zm-1.5 6a.75.75 0 0 1 1.5 0v1a.75.75 0 0 1-1.5 0v-1z"/>
+                <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM2.5 8a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0z"/>
+              </svg>
+              Error submitting the form. Please try again later.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `
+        form.insertBefore(alertDiv, form.firstChild)
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false
+        submitBtn.textContent = 'Send Message'
+      }
+    })
+    
+    // Confetti animation
+    function launchConfetti() {
+      const duration = 3000
+      const animationEnd = Date.now() + duration
+      const colors = ['#1e3a8a', '#3b82f6', '#60a5fa', '#93c5fd']
+    
+      function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min
+      }
+    
+      ;(function frame() {
+        const timeLeft = animationEnd - Date.now()
+        if (timeLeft <= 0) return
+    
+        const confettiCount = 5
+    
+        for (let i = 0; i < confettiCount; i++) {
+          const confetti = document.createElement('div')
+          confetti.style.position = 'fixed'
+          confetti.style.width = '10px'
+          confetti.style.height = '10px'
+          confetti.style.backgroundColor = colors[randomInt(0, colors.length - 1)]
+          confetti.style.top = randomInt(0, window.innerHeight) + 'px'
+          confetti.style.left = randomInt(0, window.innerWidth) + 'px'
+          confetti.style.borderRadius = '50%'
+          confetti.style.opacity = '0.8'
+          confetti.style.zIndex = '1050'
+          confetti.style.pointerEvents = 'none'
+          confetti.style.animation = `confetti-fall ${randomInt(2, 4)}s ease forwards`
+    
+          document.body.appendChild(confetti)
+    
+          setTimeout(() => {
+            confetti.remove()
+          }, 4000)
+        }
+    
+        requestAnimationFrame(frame)
+      })()
+    }
+    
+    // Add confetti fall animation keyframes
+    const styleSheet = document.createElement('style')
+    styleSheet.textContent = `
+          @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+          }
+        `
+    document.head.appendChild(styleSheet)
+  </script>
+{% endblock %}

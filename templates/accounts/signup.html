@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load socialaccount %}
+
+{% block content %}
+  <main class="signup-page">
+    <div class="container py-5">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-6 col-lg-6 col-xl-6 d-none d-md-block">
+          <img src="{% static 'images/signup-illustration.svg' %}" class="img-fluid signup-illustration" alt="Signup illustration" loading="lazy" />
+        </div>
+        <div class="col-md-6 col-lg-5 col-xl-5">
+          <div class="card shadow-lg p-4 p-md-5">
+            <form method="post" action="">
+              {% csrf_token %}
+              <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+                {% if messages %}
+                  {% for message in messages %}
+                    <div class="toast align-items-center text-bg-{{ message.tags }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                      <div class="d-flex">
+                        <div class="toast-body">{{ message }}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              </div>
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert" aria-live="assertive">
+                  {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <h2 class="mb-4 text-center">Create your Account</h2>
+              {% for field in form %}
+                <div class="mb-4">
+                  {{ field.label_tag }} {% if field.field.required %}
+                    <span class="text-danger">*</span>
+                  {% endif %}
+                  {% if field.name == 'username' %}
+                    {{ field|add_class:'form-control'|attr:'aria-required:true'|attr:'id:id_username' }}
+                    <div id="username-availability" class="small mt-2"></div>
+                  {% elif field.name == 'email' %}
+                    {{ field|add_class:'form-control'|attr:'aria-required:true'|attr:'id:id_email' }}
+                    <div id="email-availability" class="small mt-2"></div>
+                  {% else %}
+                    {% if field.errors %}
+                      {{ field|add_class:'form-control is-invalid'|attr:'aria-required:true' }}
+                    {% else %}
+                      {{ field|add_class:'form-control'|attr:'aria-required:true' }}
+                    {% endif %}
+                  {% endif %}
+                  {% if field.errors %}
+                    <div class="text-danger small alert alert-danger" role="alert" aria-describedby="{{ field.id_for_label }}-error">
+                      {% for error in field.errors %}
+                        <p id="{{ field.id_for_label }}-error">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                  {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                  {% endif %}
+                </div>
+              {% endfor %}
+              <button type="submit" class="btn btn-primary btn-lg w-100 mb-4" style="color: white;">Sign up</button>
+              <div class="d-flex justify-content-center gap-4 mb-3">
+                <a class="btn btn-social btn-icon google-btn" href="{% provider_login_url 'google' %}" aria-label="Sign in with Google"><i class="fab fa-google fa-lg"></i></a>
+                <a class="btn btn-social btn-icon facebook-btn" href="{% provider_login_url 'facebook' %}" aria-label="Sign in with Facebook"><i class="fab fa-facebook-f fa-lg"></i></a>
+                <a class="btn btn-social btn-icon x-btn" href="{% provider_login_url 'twitter' %}" aria-label="Sign in with X"><i class="fab fa-twitter fa-lg"></i></a>
+              </div>
+              <p class="text-center mt-3">
+                Already have an account? <a href="{% url 'login' %}" class="login-link">Login</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .btn-primary {
+      background: linear-gradient(135deg, #ff4c4c, #ff7878);
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #ff7878, #ff4c4c);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(255, 76, 76, 0.4);
+    }
+    .signup-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(180deg, #f9f9f9, #fff);
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(135deg, #ff4c4c, #ff7878);
+    }
+    .form-control {
+      border-radius: 10px;
+      padding: 12px;
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: #ff4c4c;
+      box-shadow: 0 0 0 0.15rem rgba(255, 76, 76, 0.3);
+      background: #fff;
+    }
+    .btn-social.btn-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      transition: all 0.3s ease;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+    .btn-social.btn-icon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+    .google-btn {
+      background-color: #ffffff;
+      border: 1px solid #dadce0;
+      color: #3c4043;
+    }
+    .google-btn:hover {
+      background-color: #f8f9fa;
+      color: #1a73e8;
+    }
+    .facebook-btn {
+      background-color: #1877f2;
+      color: #ffffff;
+    }
+    .facebook-btn:hover {
+      background-color: #166fe5;
+    }
+    .x-btn {
+      background-color: #000000;
+      color: #ffffff;
+    }
+    .x-btn:hover {
+      background-color: #1d9bf0;
+    }
+    .btn-social.btn-icon::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.3);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      display: none;
+    }
+    .btn-social.btn-icon:active::after {
+      display: block;
+    }
+    @keyframes ripple {
+      to {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+    .btn-social.btn-icon:focus {
+      outline: 2px solid #ff4c4c;
+      outline-offset: 2px;
+    }
+    .form-control.is-invalid {
+      border-color: #dc3545;
+    }
+    #username-availability.text-success,
+    #email-availability.text-success {
+      color: #28a745;
+    }
+    #username-availability.text-danger,
+    #email-availability.text-danger {
+      color: #dc3545;
+    }
+    @media (max-width: 576px) {
+      .btn-social.btn-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const csrfTokenElement = document.querySelector('input[name="csrfmiddlewaretoken"]')
+      const csrfToken = csrfTokenElement ? csrfTokenElement.value : null
+      const usernameInput = document.querySelector('#id_username')
+      const emailInput = document.querySelector('#id_email')
+      const usernameAvailabilityDiv = document.querySelector('#username-availability')
+      const emailAvailabilityDiv = document.querySelector('#email-availability')
+    
+      if (!usernameInput || !usernameAvailabilityDiv) console.error('Username input or availability div missing')
+      if (!emailInput || !emailAvailabilityDiv) console.error('Email input or availability div missing')
+      if (!csrfToken) console.error('CSRF token missing')
+    
+      function debounce(func, wait) {
+        let timeout
+        return function (...args) {
+          clearTimeout(timeout)
+          timeout = setTimeout(() => func.apply(this, args), wait)
+        }
+      }
+    
+      function checkAvailability(field, value, availabilityDiv, type) {
+        if (value.length > 0) {
+          fetch('{% url "check_availability" %}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken,
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ [type]: value })
+          })
+            .then((response) => {
+              if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
+              return response.json()
+            })
+            .then((data) => {
+              if (data.error) {
+                availabilityDiv.textContent = data.error
+                availabilityDiv.className = 'small mt-2 text-danger'
+                field.classList.add('is-invalid')
+              } else if (type === 'username' && data.username_exists) {
+                availabilityDiv.textContent = 'This username is already taken.'
+                availabilityDiv.className = 'small mt-2 text-danger'
+                field.classList.add('is-invalid')
+              } else if (type === 'email' && data.email_exists) {
+                availabilityDiv.textContent = 'This email is already registered.'
+                availabilityDiv.className = 'small mt-2 text-danger'
+                field.classList.add('is-invalid')
+              } else {
+                availabilityDiv.textContent = `This ${type} is available!`
+                availabilityDiv.className = 'small mt-2 text-success'
+                field.classList.remove('is-invalid')
+              }
+            })
+            .catch((error) => {
+              console.error(`Error checking ${type}:`, error)
+              availabilityDiv.textContent = `Error checking ${type} availability.`
+              availabilityDiv.className = 'small mt-2 text-danger'
+            })
+        } else {
+          availabilityDiv.textContent = ''
+          field.classList.remove('is-invalid')
+        }
+      }
+    
+      if (usernameInput && usernameAvailabilityDiv) {
+        usernameInput.addEventListener(
+          'input',
+          debounce(function () {
+            checkAvailability(usernameInput, usernameInput.value.trim(), usernameAvailabilityDiv, 'username')
+          }, 300)
+        )
+      }
+    
+      if (emailInput && emailAvailabilityDiv) {
+        emailInput.addEventListener(
+          'input',
+          debounce(function () {
+            checkAvailability(emailInput, emailInput.value.trim(), emailAvailabilityDiv, 'email')
+          }, 300)
+        )
+      }
+    
+      document.querySelectorAll('.toast').forEach((toast) => {
+        new bootstrap.Toast(toast).show()
+      })
+    })
+  </script>
+{% endblock %}
